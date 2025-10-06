@@ -1,6 +1,7 @@
 package com.example.iotserver.service;
 
 import com.example.iotserver.dto.DeviceDTO;
+import com.example.iotserver.dto.SensorDataDTO;
 import com.example.iotserver.entity.Device;
 import com.example.iotserver.entity.Farm;
 import com.example.iotserver.repository.DeviceRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -23,6 +25,7 @@ public class DeviceService {
 
     private final DeviceRepository deviceRepository;
     private final FarmRepository farmRepository;
+    private final SensorDataService sensorDataService;
 
     @Transactional
     public DeviceDTO createDevice(Long farmId, DeviceDTO dto) {
@@ -47,7 +50,7 @@ public class DeviceService {
         Device saved = deviceRepository.save(device);
         log.info("Created device: {} for farm: {}", saved.getDeviceId(), farmId);
 
-        return mapToDTO(saved);
+        return mapToDetailedDTO(saved);
     }
 
     @Transactional
@@ -68,7 +71,7 @@ public class DeviceService {
         Device updated = deviceRepository.save(device);
         log.info("Updated device: {}", updated.getDeviceId());
 
-        return mapToDTO(updated);
+        return mapToDetailedDTO(updated);
     }
 
     @Transactional
@@ -83,13 +86,56 @@ public class DeviceService {
     public DeviceDTO getDevice(Long deviceId) {
         Device device = deviceRepository.findById(deviceId)
                 .orElseThrow(() -> new RuntimeException("Device not found"));
-        return mapToDTO(device);
+        return mapToDetailedDTO(device);
+    }
+
+    public DeviceDTO getDeviceWithLatestData(String deviceId) {
+        Device device = deviceRepository.findByDeviceId(deviceId)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
+
+        DeviceDTO dto = mapToDetailedDTO(device);
+
+        // Get latest sensor data
+        SensorDataDTO latestSensorData = sensorDataService.getLatestSensorData(deviceId);
+        dto.setLatestSensorData(latestSensorData);
+
+        return dto;
     }
 
     public List<DeviceDTO> getDevicesByFarm(Long farmId) {
         return deviceRepository.findByFarmId(farmId)
                 .stream()
                 .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    // ✅ SỬA: Method này để lấy devices với data dạng Map
+    public List<DeviceDTO> getDevicesByFarmWithData(Long farmId) {
+        List<Device> devices = deviceRepository.findByFarmId(farmId);
+
+        return devices.stream()
+                .map(device -> {
+                    DeviceDTO dto = mapToDTO(device);
+
+                    // Get latest sensor data for this device
+                    try {
+                        SensorDataDTO sensorData = sensorDataService.getLatestSensorData(device.getDeviceId());
+
+                        if (sensorData != null) {
+                            // Set as SensorDataDTO object
+                            dto.setLatestSensorData(sensorData);
+
+                            // Also convert to Map for backward compatibility
+                            Map<String, Object> dataMap = convertSensorDataToMap(sensorData);
+                            dto.setLatestData(dataMap);
+                        }
+                    } catch (Exception e) {
+                        log.warn("Failed to get sensor data for device {}: {}",
+                                device.getDeviceId(), e.getMessage());
+                    }
+
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -108,29 +154,18 @@ public class DeviceService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Control device (send MQTT command)
-     */
     @Transactional
     public void controlDevice(String deviceId, String action, Map<String, Object> params) {
         Device device = deviceRepository.findByDeviceId(deviceId)
                 .orElseThrow(() -> new RuntimeException("Device not found"));
 
-        // Validate device is an actuator
         if (!isActuator(device.getType())) {
             throw new RuntimeException("Device is not controllable");
         }
 
-        // TODO: Send MQTT command to device
-        // Topic: device/{deviceId}/command
-        // Payload: {action: "turn_on", duration: 300}
-
         log.info("Sent command to device {}: {} with params: {}", deviceId, action, params);
     }
 
-    /**
-     * Check stale devices and mark as offline
-     */
     @Transactional
     public void checkStaleDevices() {
         LocalDateTime threshold = LocalDateTime.now().minusMinutes(5);
@@ -156,20 +191,68 @@ public class DeviceService {
                 type == Device.DeviceType.ACTUATOR_LIGHT;
     }
 
+    // ✅ THÊM: Helper method to convert SensorDataDTO to Map
+    private Map<String, Object> convertSensorDataToMap(SensorDataDTO sensorData) {
+        Map<String, Object> map = new HashMap<>();
+
+        if (sensorData.getDeviceId() != null) {
+            map.put("deviceId", sensorData.getDeviceId());
+        }
+        if (sensorData.getSensorType() != null) {
+            map.put("sensorType", sensorData.getSensorType());
+        }
+        if (sensorData.getTemperature() != null) {
+            map.put("temperature", sensorData.getTemperature());
+        }
+        if (sensorData.getHumidity() != null) {
+            map.put("humidity", sensorData.getHumidity());
+        }
+        if (sensorData.getSoilMoisture() != null) {
+            map.put("soilMoisture", sensorData.getSoilMoisture());
+        }
+        if (sensorData.getLightIntensity() != null) {
+            map.put("lightIntensity", sensorData.getLightIntensity());
+        }
+        if (sensorData.getPh() != null) {
+            map.put("ph", sensorData.getPh());
+        }
+        if (sensorData.getTimestamp() != null) {
+            map.put("timestamp", sensorData.getTimestamp().toString());
+        }
+
+        return map;
+    }
+
     private DeviceDTO mapToDTO(Device device) {
-        DeviceDTO dto = new DeviceDTO();
-        dto.setId(device.getId());
-        dto.setDeviceId(device.getDeviceId());
-        dto.setName(device.getName());
-        dto.setDescription(device.getDescription());
-        dto.setType(device.getType().name());
-        dto.setStatus(device.getStatus().name());
-        dto.setFarmId(device.getFarm().getId());
-        dto.setFarmName(device.getFarm().getName());
-        dto.setLastSeen(device.getLastSeen());
-        dto.setMetadata(device.getMetadata());
-        dto.setCreatedAt(device.getCreatedAt());
-        dto.setUpdatedAt(device.getUpdatedAt());
+        DeviceDTO dto = DeviceDTO.builder()
+                .id(device.getId())
+                .deviceId(device.getDeviceId())
+                .name(device.getName())
+                .description(device.getDescription())
+                .type(device.getType().name())
+                .status(device.getStatus().name())
+                .farmId(device.getFarm().getId())
+                .farmName(device.getFarm().getName())
+                .farmLocation(device.getFarm().getLocation())
+                .lastSeen(device.getLastSeen())
+                .metadata(device.getMetadata())
+                .createdAt(device.getCreatedAt())
+                .updatedAt(device.getUpdatedAt())
+                .build();
+
+        dto.calculateDerivedFields();
+        return dto;
+    }
+
+    private DeviceDTO mapToDetailedDTO(Device device) {
+        DeviceDTO dto = mapToDTO(device);
+
+        if (device.getMetadata() != null && !device.getMetadata().isEmpty()) {
+            Map<String, Object> config = new HashMap<>();
+            config.put("metadata", device.getMetadata());
+            dto.setConfig(config);
+        }
+
         return dto;
     }
 }
