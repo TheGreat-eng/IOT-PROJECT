@@ -40,8 +40,8 @@ public class AuthController {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setFullName(request.getFullName());
-        user.setPhone(request.getPhone());
-        user.setRole(UserRole.FARMER);
+        user.setPhoneNumber(request.getPhone());
+        user.setRole(User.Role.valueOf(UserRole.FARMER.name()));
 
         User savedUser = userService.save(user);
 
@@ -73,7 +73,7 @@ public class AuthController {
                 .userId(user.getId())
                 .email(user.getEmail())
                 .fullName(user.getFullName())
-                .role(user.getRole())
+                .role(user.getRole() == User.Role.ADMIN ? UserRole.ADMIN : UserRole.FARMER)
                 .build();
 
         return ResponseEntity.ok(response);

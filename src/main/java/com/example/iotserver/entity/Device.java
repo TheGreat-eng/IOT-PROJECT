@@ -1,58 +1,94 @@
 package com.example.iotserver.entity;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import com.example.iotserver.enums.DeviceStatus;
-import com.example.iotserver.enums.DeviceType;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "devices")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Device {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
+
+    // Unique identifier for MQTT
+    @Column(nullable = false, unique = true)
+    @ToString.Include
+    private String deviceId;
 
     @Column(nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    private DeviceType type; // SENSOR, PUMP, FAN, LIGHT
-
-    @Column(unique = true)
-    private String deviceCode; // Mã thiết bị duy nhất
+    @Column(length = 500)
+    private String description;
 
     @Enumerated(EnumType.STRING)
-    private DeviceStatus status; // ACTIVE, INACTIVE, ERROR
+    @Column(nullable = false)
+    private DeviceType type;
 
-    @ManyToOne
-    @JoinColumn(name = "zone_id")
-    private Zone zone;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DeviceStatus status = DeviceStatus.OFFLINE;
 
-    private Boolean isControllable; // Có điều khiển được không
+    // Device thuộc về Farm (nếu business yêu cầu)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "farm_id", nullable = false)
+    @ToString.Exclude
+    private Farm farm;
 
-    @CreationTimestamp
+    @Column(name = "last_seen")
+    private LocalDateTime lastSeen;
+
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    // Metadata for device configuration (JSON string for flexible config)
+    @Column(columnDefinition = "TEXT")
+    private String metadata;
+
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = now;
+        updatedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    public enum DeviceType {
+        SENSOR_DHT22, // Temperature + Humidity
+        SENSOR_SOIL_MOISTURE, // Soil moisture
+        SENSOR_LIGHT, // Light intensity
+        SENSOR_PH, // pH sensor
+        ACTUATOR_PUMP, // Water pump
+        ACTUATOR_FAN, // Fan
+        ACTUATOR_LIGHT // Light/LED
+    }
+
+    public enum DeviceStatus {
+        ONLINE,
+        OFFLINE,
+        ERROR,
+        MAINTENANCE
+    }
 }

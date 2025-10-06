@@ -1,5 +1,6 @@
 package com.example.iotserver.dto.response;
 
+import com.example.iotserver.entity.User.Role;
 import com.example.iotserver.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: smartfarm-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: smartfarm
+      MYSQL_USER: smartfarm_user
+      MYSQL_PASSWORD: smartfarm_pass
+    ports:
+      - "3307:3306" # Changed from 3306:3306 to 3307:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - smartfarm-network
+
+  # InfluxDB for time-series data
+  influxdb:
+    image: influxdb:2.7
+    container_name: smartfarm-influxdb
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: adminpassword
+      DOCKER_INFLUXDB_INIT_ORG: smart-farm
+      DOCKER_INFLUXDB_INIT_BUCKET: sensor-data
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: my-super-secret-token
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    networks:
+      - smartfarm-network
+
+  # MQTT Broker (Mosquitto)
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: smartfarm-mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    networks:
+      - smartfarm-network
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: smartfarm-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - smartfarm-network
+  # Spring Boot Backend (will build later)
+  # backend:
+  #   build: .
+  #   container_name: smartfarm-backend
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/smartfarm
+  #     SPRING_DATASOURCE_USERNAME: smartfarm_user
+  #     SPRING_DATASOURCE_PASSWORD: smartfarm_pass
+  #     INFLUXDB_URL: http://influxdb:8086
+  #     INFLUXDB_TOKEN: my-super-secret-token
+  #     MQTT_BROKER_URL: tcp://mosquitto:1883
+  #     SPRING_REDIS_HOST: redis
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - mysql
+  #     - influxdb
+  #     - mosquitto
+  #     - redis
+  #   networks:
+  #     - smartfarm-network
+
+volumes:
+  mysql_data:
+  influxdb_data:
+  redis_data:
+
+
+networks:
+  smartfarm-network:
+    driver: bridge
