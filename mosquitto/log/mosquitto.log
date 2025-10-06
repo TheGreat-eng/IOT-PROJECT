@@ -192,3 +192,21 @@
 2025-10-06T16:29:27: Client smart-farm-server_inbound closed its connection.
 2025-10-06T16:29:36: mosquitto version 2.0.22 terminating
 2025-10-06T16:29:36: Saving in-memory database to /mosquitto/data//mosquitto.db.
+2025-10-06T16:51:35: mosquitto version 2.0.22 starting
+2025-10-06T16:51:35: Config loaded from /mosquitto/config/mosquitto.conf.
+2025-10-06T16:51:35: Opening ipv4 listen socket on port 1883.
+2025-10-06T16:51:35: Opening ipv6 listen socket on port 1883.
+2025-10-06T16:51:35: Opening websockets listen socket on port 9001.
+2025-10-06T16:51:35: mosquitto version 2.0.22 running
+2025-10-06T16:52:28: mosquitto version 2.0.22 terminating
+2025-10-06T16:52:28: Saving in-memory database to /mosquitto/data//mosquitto.db.
+2025-10-06T16:52:42: mosquitto version 2.0.22 starting
+2025-10-06T16:52:42: Config loaded from /mosquitto/config/mosquitto.conf.
+2025-10-06T16:52:42: Opening ipv4 listen socket on port 1883.
+2025-10-06T16:52:42: Opening ipv6 listen socket on port 1883.
+2025-10-06T16:52:42: Opening websockets listen socket on port 9001.
+2025-10-06T16:52:42: mosquitto version 2.0.22 running
+2025-10-06T16:52:45: New connection from 172.18.0.1:44640 on port 1883.
+2025-10-06T16:52:45: New client connected from 172.18.0.1:44640 as simulator_2153 (p2, c1, k60).
+2025-10-06T16:52:54: New connection from 172.18.0.1:47006 on port 1883.
+2025-10-06T16:52:54: New client connected from 172.18.0.1:47006 as smart-farm-server_inbound (p2, c1, k60).
