@@ -1,7 +1,9 @@
 package com.example.iotserver.controller;
 
 import com.example.iotserver.dto.FarmDTO;
+import com.example.iotserver.entity.User;
 import com.example.iotserver.service.FarmService;
+import com.example.iotserver.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -15,6 +17,7 @@ import java.util.List;
 public class FarmController {
 
     private final FarmService farmService;
+    private final UserService userService;
 
     /**
      * Create new farm
@@ -91,16 +94,19 @@ public class FarmController {
         return ResponseEntity.ok(farms);
     }
 
-    // Helper method to extract user ID from authentication
+    // ✅ FIX: Helper method to extract user ID from JWT authentication
     private Long getUserIdFromAuth(Authentication authentication) {
-        // TODO: Implement based on your security configuration
-        // For now, return a dummy value for testing
-        if (authentication == null) {
-            return 1L; // Default user for testing
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("User not authenticated");
         }
 
-        // In production, get from JWT or session
-        // Example: ((UserDetails) authentication.getPrincipal()).getId()
-        return 1L;
+        // Lấy email từ JWT token (principal)
+        String email = authentication.getName();
+
+        // Tìm user by email
+        User user = userService.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found: " + email));
+
+        return user.getId();
     }
 }
