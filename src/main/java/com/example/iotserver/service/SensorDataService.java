@@ -14,11 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -69,7 +69,7 @@ public class SensorDataService {
     /**
      * Get latest sensor data for a device
      */
-    public Map<String, Object> getLatestSensorData(String deviceId) {
+    public SensorDataDTO getLatestSensorData(String deviceId) {
         String flux = String.format(
                 "from(bucket: \"%s\") " +
                         "|> range(start: -1h) " +
@@ -77,13 +77,18 @@ public class SensorDataService {
                         "|> last()",
                 influxDBConfig.getBucket(), deviceId);
 
-        return executeQuery(flux);
+        Map<String, Object> rawData = executeQuery(flux);
+        if (rawData.isEmpty()) {
+            return null;
+        }
+
+        return SensorDataDTO.fromInfluxRecord(rawData);
     }
 
     /**
      * Get sensor data for a time range
      */
-    public List<Map<String, Object>> getSensorDataRange(
+    public List<SensorDataDTO> getSensorDataRange(
             String deviceId,
             Instant start,
             Instant end) {
@@ -97,13 +102,16 @@ public class SensorDataService {
                 end.toString(),
                 deviceId);
 
-        return executeQueryList(flux);
+        List<Map<String, Object>> rawDataList = executeQueryList(flux);
+        return rawDataList.stream()
+                .map(SensorDataDTO::fromInfluxRecord)
+                .collect(Collectors.toList());
     }
 
     /**
      * Get aggregated sensor data (for charts)
      */
-    public List<Map<String, Object>> getAggregatedData(
+    public List<SensorDataDTO> getAggregatedData(
             String deviceId,
             String field,
             String aggregation, // mean, max, min
@@ -121,7 +129,14 @@ public class SensorDataService {
                 window,
                 aggregation);
 
-        return executeQueryList(flux);
+        List<Map<String, Object>> rawDataList = executeQueryList(flux);
+        return rawDataList.stream()
+                .map(data -> {
+                    SensorDataDTO dto = SensorDataDTO.fromInfluxRecord(data);
+                    dto.setAvgValue((Double) data.get("_value"));
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     /**
@@ -142,7 +157,13 @@ public class SensorDataService {
         for (Map<String, Object> record : results) {
             String deviceId = (String) record.get("device_id");
             deviceDataMap.putIfAbsent(deviceId, new HashMap<>());
-            deviceDataMap.get(deviceId).putAll(record);
+
+            String field = record.get("_field").toString();
+            Object value = record.get("_value");
+
+            deviceDataMap.get(deviceId).put(field, value);
+            deviceDataMap.get(deviceId).put("device_id", deviceId);
+            deviceDataMap.get(deviceId).put("timestamp", record.get("_time"));
         }
 
         return deviceDataMap;
@@ -176,9 +197,9 @@ public class SensorDataService {
 
     private Map<String, Object> fluxRecordToMap(FluxRecord record) {
         Map<String, Object> map = new HashMap<>();
-        map.put("time", record.getTime());
-        map.put("value", record.getValue());
-        map.put("field", record.getField());
+        map.put("_time", record.getTime());
+        map.put("_value", record.getValue());
+        map.put("_field", record.getField());
         map.putAll(record.getValues());
         return map;
     }
