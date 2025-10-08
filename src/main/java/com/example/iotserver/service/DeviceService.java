@@ -6,6 +6,8 @@ import com.example.iotserver.entity.Device;
 import com.example.iotserver.entity.Farm;
 import com.example.iotserver.repository.DeviceRepository;
 import com.example.iotserver.repository.FarmRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class DeviceService {
     private final DeviceRepository deviceRepository;
     private final FarmRepository farmRepository;
     private final SensorDataService sensorDataService;
+
+    // ✅ THÊM: Inject MQTT Gateway
+    private final MqttGateway mqttGateway;
 
     @Transactional
     public DeviceDTO createDevice(Long farmId, DeviceDTO dto) {
@@ -163,7 +168,22 @@ public class DeviceService {
             throw new RuntimeException("Device is not controllable");
         }
 
-        log.info("Sent command to device {}: {} with params: {}", deviceId, action, params);
+        // ✅ GỬI LỆNH QUA MQTT
+        String topic = String.format("device/%s/control", deviceId);
+
+        Map<String, Object> command = new HashMap<>();
+        command.put("deviceId", deviceId);
+        command.put("action", action);
+        command.putAll(params);
+        command.put("timestamp", LocalDateTime.now().toString());
+
+        try {
+            mqttGateway.sendToMqtt(new ObjectMapper().writeValueAsString(command), topic);
+            log.info("✅ Đã gửi lệnh MQTT tới device {}: {} with params: {}", deviceId, action, params);
+        } catch (Exception e) {
+            log.error("❌ Lỗi khi gửi lệnh MQTT: {}", e.getMessage());
+            throw new RuntimeException("Failed to send control command", e);
+        }
     }
 
     @Transactional

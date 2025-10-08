@@ -10,6 +10,7 @@ import org.springframework.integration.core.MessageProducer;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
+import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
@@ -70,5 +71,24 @@ public class MqttConfig {
         adapter.setOutputChannel(mqttInputChannel());
 
         return adapter;
+    }
+
+    // ✅ THÊM: Outbound Channel để gửi message
+    @Bean
+    public MessageChannel mqttOutboundChannel() {
+        return new DirectChannel();
+    }
+
+    // ✅ THÊM: Outbound Adapter để publish MQTT
+    @Bean
+    @ServiceActivator(inputChannel = "mqttOutboundChannel")
+    public MessageHandler mqttOutbound() {
+        MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler(
+                clientId + "_outbound",
+                mqttClientFactory());
+        messageHandler.setAsync(true);
+        messageHandler.setDefaultTopic("device/+/control");
+        messageHandler.setDefaultQos(1);
+        return messageHandler;
     }
 }

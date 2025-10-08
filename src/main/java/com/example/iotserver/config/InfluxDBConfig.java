@@ -1,5 +1,9 @@
 package com.example.iotserver.config;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;
 import com.influxdb.client.WriteApiBlocking;
@@ -30,6 +34,16 @@ public class InfluxDBConfig {
     @Bean
     public WriteApiBlocking writeApi(InfluxDBClient influxDBClient) {
         return influxDBClient.getWriteApiBlocking();
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        // ✅ Fix encoding UTF-8
+        mapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, false);
+        return mapper;
     }
 
     public String getOrg() {

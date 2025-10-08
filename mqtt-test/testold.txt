@@ -46,7 +46,7 @@ try:
         "sensorType": "SOIL_MOISTURE",
         "temperature": 28.5,
         "humidity": 65.0,
-        "soilMoisture": 20.0,  # ✅ < 30 → TRIGGER RULE
+        "soilMoisture": 22.0,  # ✅ < 30 → TRIGGER RULE
         "lightIntensity": 15000,
         "ph": 6.5,
         "timestamp": datetime.now().isoformat()
