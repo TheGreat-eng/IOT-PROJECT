@@ -292,3 +292,110 @@
 2025-10-08T08:07:21: Saving in-memory database to /mosquitto/data//mosquitto.db.
 2025-10-08T08:16:44: Client smart-farm-server_inbound closed its connection.
 2025-10-08T08:16:49: Client simulator_6745 closed its connection.
+2025-10-08T08:25:44: mosquitto version 2.0.22 starting
+2025-10-08T08:25:44: Config loaded from /mosquitto/config/mosquitto.conf.
+2025-10-08T08:25:44: Opening ipv4 listen socket on port 1883.
+2025-10-08T08:25:44: Opening ipv6 listen socket on port 1883.
+2025-10-08T08:25:44: Opening websockets listen socket on port 9001.
+2025-10-08T08:25:44: mosquitto version 2.0.22 running
+2025-10-08T08:25:59: New connection from 172.18.0.1:38080 on port 1883.
+2025-10-08T08:25:59: New client connected from 172.18.0.1:38080 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T08:26:14: New connection from 172.18.0.1:56594 on port 1883.
+2025-10-08T08:26:14: New client connected from 172.18.0.1:56594 as simulator_7903 (p2, c1, k60).
+2025-10-08T08:26:29: New connection from 172.18.0.1:53042 on port 1883.
+2025-10-08T08:26:29: New client connected from 172.18.0.1:53042 as auto-656CCA24-9976-BA90-04F7-878AA6D4F57A (p2, c1, k60).
+2025-10-08T08:27:05: Client auto-656CCA24-9976-BA90-04F7-878AA6D4F57A disconnected.
+2025-10-08T08:39:24: Client smart-farm-server_inbound disconnected.
+2025-10-08T08:39:31: New connection from 172.18.0.1:45112 on port 1883.
+2025-10-08T08:39:31: New client connected from 172.18.0.1:45112 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T08:39:33: Client smart-farm-server_inbound disconnected.
+2025-10-08T08:39:38: New connection from 172.18.0.1:47954 on port 1883.
+2025-10-08T08:39:39: New client connected from 172.18.0.1:47954 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T08:39:55: Client smart-farm-server_inbound closed its connection.
+2025-10-08T08:40:05: New connection from 172.18.0.1:54516 on port 1883.
+2025-10-08T08:40:05: New client connected from 172.18.0.1:54516 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T08:42:33: New connection from 172.18.0.1:51024 on port 1883.
+2025-10-08T08:42:33: New client connected from 172.18.0.1:51024 as auto-31346EDC-FB17-663F-D422-146713EE21A7 (p2, c1, k60).
+2025-10-08T08:42:42: Client simulator_7903 disconnected.
+2025-10-08T08:42:45: New connection from 172.18.0.1:39170 on port 1883.
+2025-10-08T08:42:45: New client connected from 172.18.0.1:39170 as simulator_2165 (p2, c1, k60).
+2025-10-08T08:43:09: Client auto-31346EDC-FB17-663F-D422-146713EE21A7 disconnected.
+2025-10-08T08:55:03: Saving in-memory database to /mosquitto/data//mosquitto.db.
+2025-10-08T09:11:19: New connection from 172.18.0.1:47276 on port 1883.
+2025-10-08T09:11:19: New client connected from 172.18.0.1:47276 as auto-1DF5380D-4EC2-9E6F-D63E-3E30CBC1CAC9 (p2, c1, k60).
+2025-10-08T09:11:55: Client auto-1DF5380D-4EC2-9E6F-D63E-3E30CBC1CAC9 disconnected.
+2025-10-08T09:12:06: Client smart-farm-server_inbound closed its connection.
+2025-10-08T09:12:18: New connection from 172.18.0.1:39058 on port 1883.
+2025-10-08T09:12:18: New client connected from 172.18.0.1:39058 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T09:12:24: Client simulator_2165 disconnected.
+2025-10-08T09:12:27: New connection from 172.18.0.1:35634 on port 1883.
+2025-10-08T09:12:27: New client connected from 172.18.0.1:35634 as simulator_7807 (p2, c1, k60).
+2025-10-08T09:12:30: New connection from 172.18.0.1:32952 on port 1883.
+2025-10-08T09:12:30: New client connected from 172.18.0.1:32952 as auto-C15CBF62-6077-AB23-4B7B-43FD1C7CD529 (p2, c1, k60).
+2025-10-08T09:13:06: Client auto-C15CBF62-6077-AB23-4B7B-43FD1C7CD529 disconnected.
+2025-10-08T09:14:50: Client smart-farm-server_inbound closed its connection.
+2025-10-08T09:15:01: New connection from 172.18.0.1:43830 on port 1883.
+2025-10-08T09:15:01: New client connected from 172.18.0.1:43830 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T09:15:16: New connection from 172.18.0.1:47252 on port 1883.
+2025-10-08T09:15:16: New client connected from 172.18.0.1:47252 as auto-79096108-38CE-5A2B-47C7-EA30752259B6 (p2, c1, k60).
+2025-10-08T09:15:53: Client auto-79096108-38CE-5A2B-47C7-EA30752259B6 disconnected.
+2025-10-08T09:19:13: Client smart-farm-server_inbound closed its connection.
+2025-10-08T09:19:26: New connection from 172.18.0.1:42014 on port 1883.
+2025-10-08T09:19:26: New client connected from 172.18.0.1:42014 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T09:19:39: New connection from 172.18.0.1:41144 on port 1883.
+2025-10-08T09:19:39: New client connected from 172.18.0.1:41144 as auto-39F7AFDA-4CDE-6DF7-25E4-BB0103A06C34 (p2, c1, k60).
+2025-10-08T09:20:16: Client auto-39F7AFDA-4CDE-6DF7-25E4-BB0103A06C34 disconnected.
+2025-10-08T09:21:20: Client simulator_7807 disconnected.
+2025-10-08T09:24:09: Saving in-memory database to /mosquitto/data//mosquitto.db.
+2025-10-08T09:24:53: New connection from 172.18.0.1:49582 on port 1883.
+2025-10-08T09:24:53: New client connected from 172.18.0.1:49582 as simulator_6623 (p2, c1, k60).
+2025-10-08T09:26:19: New connection from 172.18.0.1:42718 on port 1883.
+2025-10-08T09:26:19: New client connected from 172.18.0.1:42718 as auto-1B1C3F28-5142-B7EF-5032-F63023125D3A (p2, c1, k60).
+2025-10-08T09:26:35: Client simulator_6623 disconnected.
+2025-10-08T09:26:56: Client auto-1B1C3F28-5142-B7EF-5032-F63023125D3A disconnected.
+2025-10-08T09:27:04: New connection from 172.18.0.1:33902 on port 1883.
+2025-10-08T09:27:04: New client connected from 172.18.0.1:33902 as simulator_6780 (p2, c1, k60).
+2025-10-08T09:27:18: New connection from 172.18.0.1:40750 on port 1883.
+2025-10-08T09:27:18: New client connected from 172.18.0.1:40750 as auto-84F3B09D-7974-8F74-2B2E-9DDA5481A7D6 (p2, c1, k60).
+2025-10-08T09:27:55: Client auto-84F3B09D-7974-8F74-2B2E-9DDA5481A7D6 disconnected.
+2025-10-08T09:28:12: Client smart-farm-server_inbound closed its connection.
+2025-10-08T09:28:15: Client simulator_6780 closed its connection.
+2025-10-08T09:30:13: New connection from 172.18.0.1:53990 on port 1883.
+2025-10-08T09:30:13: New client connected from 172.18.0.1:53990 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T09:32:03: New connection from 172.18.0.1:44886 on port 1883.
+2025-10-08T09:32:03: New client connected from 172.18.0.1:44886 as simulator_4754 (p2, c1, k60).
+2025-10-08T09:32:15: New connection from 172.18.0.1:54668 on port 1883.
+2025-10-08T09:32:15: New client connected from 172.18.0.1:54668 as auto-34161666-7A70-F6C3-B04F-E84264A3C4CF (p2, c1, k60).
+2025-10-08T09:32:46: Client simulator_4754 disconnected.
+2025-10-08T09:32:52: Client auto-34161666-7A70-F6C3-B04F-E84264A3C4CF disconnected.
+2025-10-08T09:34:30: New connection from 172.18.0.1:59242 on port 1883.
+2025-10-08T09:34:30: New client connected from 172.18.0.1:59242 as auto-F636B779-3DF9-2770-FF8A-CEB015D18448 (p2, c1, k60).
+2025-10-08T09:35:07: Client auto-F636B779-3DF9-2770-FF8A-CEB015D18448 disconnected.
+2025-10-08T09:39:20: New connection from 172.18.0.1:40026 on port 1883.
+2025-10-08T09:39:20: New client connected from 172.18.0.1:40026 as auto-56A05306-622C-AB87-30FF-D419D76999CF (p2, c1, k60).
+2025-10-08T09:39:56: Client auto-56A05306-622C-AB87-30FF-D419D76999CF disconnected.
+2025-10-08T09:40:24: New connection from 172.18.0.1:53694 on port 1883.
+2025-10-08T09:40:24: New client connected from 172.18.0.1:53694 as simulator_4263 (p2, c1, k60).
+2025-10-08T09:40:38: New connection from 172.18.0.1:55628 on port 1883.
+2025-10-08T09:40:38: New client connected from 172.18.0.1:55628 as auto-13F9D897-E175-CA38-4C6F-88FFB53D0F30 (p2, c1, k60).
+2025-10-08T09:41:14: Client auto-13F9D897-E175-CA38-4C6F-88FFB53D0F30 disconnected.
+2025-10-08T09:44:37: Client simulator_4263 disconnected.
+2025-10-08T09:44:41: New connection from 172.18.0.1:48418 on port 1883.
+2025-10-08T09:44:41: New client connected from 172.18.0.1:48418 as auto-340D2666-982C-38CE-022C-178B1695C494 (p2, c1, k60).
+2025-10-08T09:44:44: Client auto-340D2666-982C-38CE-022C-178B1695C494 disconnected.
+2025-10-08T09:52:06: Client smart-farm-server_inbound disconnected.
+2025-10-08T09:52:13: New connection from 172.18.0.1:58592 on port 1883.
+2025-10-08T09:52:13: New client connected from 172.18.0.1:58592 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T09:52:46: Client smart-farm-server_inbound disconnected.
+2025-10-08T09:52:51: New connection from 172.18.0.1:45688 on port 1883.
+2025-10-08T09:52:51: New client connected from 172.18.0.1:45688 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T09:53:10: Saving in-memory database to /mosquitto/data//mosquitto.db.
+2025-10-08T09:53:54: Client smart-farm-server_inbound disconnected.
+2025-10-08T09:54:06: New connection from 172.18.0.1:44598 on port 1883.
+2025-10-08T09:54:07: New client connected from 172.18.0.1:44598 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T09:54:13: New connection from 172.18.0.1:44614 on port 1883.
+2025-10-08T09:54:13: New client connected from 172.18.0.1:44614 as auto-D59334E6-221F-49AC-3013-D3FD02A953C5 (p2, c1, k60).
+2025-10-08T09:54:15: Client auto-D59334E6-221F-49AC-3013-D3FD02A953C5 disconnected.
+2025-10-08T10:02:24: New connection from 172.18.0.1:52432 on port 1883.
+2025-10-08T10:02:24: New client connected from 172.18.0.1:52432 as auto-1B4920AC-9134-8B80-D8C5-7365016462C9 (p2, c1, k60).
+2025-10-08T10:02:26: Client auto-1B4920AC-9134-8B80-D8C5-7365016462C9 disconnected.

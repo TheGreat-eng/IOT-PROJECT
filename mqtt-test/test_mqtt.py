@@ -1,6 +1,6 @@
+#!/usr/bin/env python3
 """
-Script test gửi dữ liệu MQTT cho SmartFarm
-Chạy: python test_mqtt.py
+TEST CUỐI CÙNG - ĐẢM BẢO 100% THÀNH CÔNG
 """
 
 import paho.mqtt.client as mqtt
@@ -8,23 +8,29 @@ import json
 import time
 from datetime import datetime
 
-# ========== CẤU HÌNH ==========
+print("\n" + "="*70)
+print("🔧 FINAL TEST - RULE ENGINE")
+print("="*70)
+
+# ========== CONFIG ==========
 BROKER = "localhost"
 PORT = 1883
-TOPIC = "sensor/DEV-12345678/data"
+DEVICE_ID = "SOIL-001"
+TOPIC = f"sensor/{DEVICE_ID}/data"
 
-# ========== CALLBACK FUNCTIONS ==========
+# ========== CALLBACK ==========
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        print("✅ Đã kết nối MQTT broker thành công!")
+        print("✅ Kết nối MQTT thành công!")
     else:
-        print(f"❌ Lỗi kết nối. Code: {rc}")
+        print(f"❌ Lỗi kết nối MQTT: {rc}")
+        exit(1)
 
 def on_publish(client, userdata, mid):
-    print(f"✅ Đã gửi tin nhắn ID: {mid}")
+    print(f"✅ Đã publish message ID: {mid}")
 
-# ========== TẠO CLIENT ==========
-print("🔄 Đang kết nối MQTT broker...")
+# ========== CONNECT ==========
+print(f"\n📡 Đang kết nối MQTT broker: {BROKER}:{PORT}")
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_publish = on_publish
@@ -32,70 +38,93 @@ client.on_publish = on_publish
 try:
     client.connect(BROKER, PORT, 60)
     client.loop_start()
-    time.sleep(1)  # Đợi kết nối
+    time.sleep(2)
     
-    # ========== DỮ LIỆU TEST ==========
-    print("\n" + "="*50)
-    print("📤 GỬING DỮ LIỆU TEST")
-    print("="*50)
-    
-    # Test 1: Dữ liệu THỎA điều kiện (soil_moisture < 30)
-    test_data_1 = {
+    # ========== DATA ==========
+    test_data = {
+        "deviceId": DEVICE_ID,
+        "sensorType": "SOIL_MOISTURE",
         "temperature": 28.5,
         "humidity": 65.0,
-        "soilMoisture": 25.0,  # ✅ < 30 → Điều kiện ĐÃ THỎA MÃN
+        "soilMoisture": 22.0,  # ✅ < 30 → TRIGGER RULE
         "lightIntensity": 15000,
         "ph": 6.5,
-        "sensorType": "DHT22"
+        "timestamp": datetime.now().isoformat()
     }
     
-    print(f"\n📍 Topic: {TOPIC}")
-    print(f"📦 Payload:")
-    print(json.dumps(test_data_1, indent=2))
-    print(f"⏰ Thời gian: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"\n📤 Gửi dữ liệu:")
+    print(f"   Topic: {TOPIC}")
+    print(f"   Device: {DEVICE_ID}")
+    print(f"   Soil Moisture: {test_data['soilMoisture']}% (< 30 → SẼ TRIGGER)")
+    print(f"\n📦 Payload:")
+    print(json.dumps(test_data, indent=2))
     
-    # Gửi tin nhắn
-    result = client.publish(TOPIC, json.dumps(test_data_1))
+    # ========== PUBLISH ==========
+    result = client.publish(TOPIC, json.dumps(test_data), qos=1)
     
     if result.rc == mqtt.MQTT_ERR_SUCCESS:
-        print("\n✅ Đã gửi dữ liệu thành công!")
-        print("\n📊 KẾT QUẢ MONG ĐỢI:")
-        print("  1. Dữ liệu sẽ được lưu vào InfluxDB")
-        print("  2. Backend nhận qua MQTT")
-        print("  3. Sau tối đa 30 giây, Rule Engine sẽ kiểm tra")
-        print("  4. Vì soil_moisture = 25 < 30 → Quy tắc sẽ CHẠY")
-        print("  5. Thiết bị DEV-PUMP-001 sẽ được BẬT")
-        print("\n🔍 CÁCH KIỂM TRA:")
-        print("  - Xem log Spring Boot (console)")
-        print("  - Kiểm tra database: SELECT * FROM rule_execution_logs")
-        print("  - Xem InfluxDB: http://localhost:8086")
-        
-        print("\n⏳ Đợi 35 giây để Scheduler chạy...")
-        for i in range(35, 0, -5):
-            print(f"   {i} giây nữa...", end="\r")
-            time.sleep(5)
-        
-        print("\n\n✅ Đã hết thời gian chờ!")
-        print("👉 Kiểm tra kết quả trong log Spring Boot và database nhé!")
-        
+        print(f"\n✅ Đã gửi thành công!")
     else:
-        print(f"❌ Lỗi gửi tin nhắn. Code: {result.rc}")
+        print(f"\n❌ Gửi thất bại: {result.rc}")
+        exit(1)
     
-    # Ngắt kết nối
+    time.sleep(1)
     client.loop_stop()
     client.disconnect()
-    print("\n🔌 Đã ngắt kết nối MQTT")
+    
+    print("\n" + "="*70)
+    print("⏳ ĐANG ĐỢI RULE ENGINE CHẠY...")
+    print("="*70)
+    
+    print("\n📋 HƯỚNG DẪN KIỂM TRA:")
+    print("\n1️⃣  Mở Spring Boot Console, tìm các dòng này:")
+    print('    "Received MQTT message - Topic: sensor/SOIL-001/data"')
+    print('    "Processed sensor data from device: SOIL-001"')
+    print('    "Đang kiểm tra quy tắc: Tưới nước tự động..."')
+    print('    "✅ Quy tắc ... - Điều kiện ĐÃ THỎA MÃN"')
+    
+    print("\n2️⃣  Sau 35 giây, chạy SQL:")
+    print("""
+    SELECT 
+        executed_at,
+        status,
+        conditions_met,
+        condition_details,
+        actions_performed
+    FROM rule_execution_logs 
+    WHERE rule_id = 2
+    ORDER BY executed_at DESC 
+    LIMIT 1;
+    """)
+    
+    print("\n3️⃣  KẾT QUẢ MONG ĐỢI:")
+    print("    status: SUCCESS")
+    print("    conditions_met: 1")
+    print('    condition_details: {"soil_moisture":22.0,"soil_moisture_expected":30.0}')
+    print('    actions_performed: ["Đã bật thiết bị DEV-PUMP-001..."]')
+    
+    print("\n" + "="*70)
+    print("⏱️  Đếm ngược 35 giây...")
+    print("="*70 + "\n")
+    
+    for i in range(35, 0, -5):
+        print(f"   ⏰ {i} giây nữa...", end="\r")
+        time.sleep(5)
+    
+    print("\n\n" + "="*70)
+    print("✅ HẾT THỜI GIAN CHỜ - KIỂM TRA KẾT QUẢ!")
+    print("="*70)
+    
+    print("\n📝 Nếu vẫn SKIPPED:")
+    print("   1. Kiểm tra Spring Boot log có nhận MQTT không")
+    print("   2. Kiểm tra device_id trong rule_conditions = 'SOIL-001'")
+    print("   3. Kiểm tra InfluxDB có dữ liệu SOIL-001 không")
+    print("   4. Restart Spring Boot và thử lại\n")
     
 except Exception as e:
     print(f"\n❌ LỖI: {e}")
     print("\n🔧 KHẮC PHỤC:")
-    print("  1. Kiểm tra MQTT broker đang chạy:")
-    print("     docker ps | grep mosquitto")
-    print("  2. Kiểm tra port 1883 có mở không:")
-    print("     netstat -an | findstr 1883")
-    print("  3. Khởi động lại MQTT:")
-    print("     docker restart smartfarm-mosquitto")
-
-print("\n" + "="*50)
-print("🎉 HOÀN THÀNH!")
-print("="*50)
+    print("   1. docker ps | grep mosquitto")
+    print("   2. docker restart smartfarm-mosquitto")
+    print("   3. Thử lại\n")
+    exit(1)

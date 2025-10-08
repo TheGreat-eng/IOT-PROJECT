@@ -182,39 +182,47 @@ public class RuleEngineService {
      */
     private boolean evaluateSensorCondition(RuleCondition condition, Map<String, Object> context) {
         try {
-            // Lấy dữ liệu cảm biến mới nhất
             String deviceId = condition.getDeviceId();
+
+            log.info("🔍 [Rule Check] deviceId: {}, field: {}, operator: {}, value: {}",
+                    deviceId, condition.getField(), condition.getOperator(), condition.getValue());
+
             if (deviceId == null || deviceId.isEmpty()) {
-                log.warn("Thiếu deviceId cho điều kiện cảm biến");
+                log.warn("❌ [Rule Check] Thiếu deviceId cho điều kiện cảm biến");
                 return false;
             }
 
             SensorDataDTO sensorData = sensorDataService.getLatestSensorData(deviceId);
+
+            log.info("🔍 [Rule Check] Sensor data từ InfluxDB: {}", sensorData != null ? "CÓ DỮ LIỆU" : "NULL");
+
             if (sensorData == null) {
-                log.warn("Không có dữ liệu cảm biến cho thiết bị: {}", deviceId);
-                context.put("error_" + condition.getField(), "Không có dữ liệu");
+                log.warn("❌ [Rule Check] Không có dữ liệu cảm biến cho thiết bị: {}", deviceId);
                 return false;
             }
 
-            // Lấy giá trị theo field
             Double actualValue = getSensorValue(sensorData, condition.getField());
+
+            log.info("🔍 [Rule Check] actualValue: {}, expectedValue: {}", actualValue, condition.getValue());
+
             if (actualValue == null) {
-                log.warn("Không tìm thấy giá trị cho trường: {}", condition.getField());
+                log.warn("❌ [Rule Check] Không tìm thấy giá trị cho trường: {}", condition.getField());
                 return false;
             }
 
-            // Lấy giá trị mong đợi
             Double expectedValue = Double.parseDouble(condition.getValue());
-
-            // Lưu vào context
             context.put(condition.getField(), actualValue);
             context.put(condition.getField() + "_expected", expectedValue);
 
-            // So sánh
-            return compareValues(actualValue, condition.getOperator(), expectedValue);
+            boolean result = compareValues(actualValue, condition.getOperator(), expectedValue);
+
+            log.info("🔍 [Rule Check] So sánh: {} {} {} = {}",
+                    actualValue, condition.getOperator(), expectedValue, result);
+
+            return result;
 
         } catch (Exception e) {
-            log.error("Lỗi khi kiểm tra điều kiện cảm biến: {}", e.getMessage());
+            log.error("❌ [Rule Check] Lỗi: {}", e.getMessage(), e);
             return false;
         }
     }

@@ -70,19 +70,86 @@ public class SensorDataService {
      * Get latest sensor data for a device
      */
     public SensorDataDTO getLatestSensorData(String deviceId) {
-        String flux = String.format(
-                "from(bucket: \"%s\") " +
-                        "|> range(start: -1h) " +
-                        "|> filter(fn: (r) => r[\"device_id\"] == \"%s\") " +
-                        "|> last()",
-                influxDBConfig.getBucket(), deviceId);
+        try {
+            // ✅ THÊM LOG DEBUG
+            log.info("🔍 [InfluxDB Query] Đang lấy dữ liệu mới nhất cho device: {}", deviceId);
 
-        Map<String, Object> rawData = executeQuery(flux);
-        if (rawData.isEmpty()) {
+            String query = String.format(
+                    "from(bucket: \"%s\") " +
+                            "|> range(start: -1h) " +
+                            "|> filter(fn: (r) => r[\"device_id\"] == \"%s\") " +
+                            "|> filter(fn: (r) => r[\"_measurement\"] == \"sensor_data\") " +
+                            "|> last()",
+                    influxDBConfig.getBucket(), deviceId);
+
+            // ✅ THÊM LOG DEBUG
+            log.info("🔍 [InfluxDB Query] Query: {}", query);
+
+            QueryApi queryApi = influxDBClient.getQueryApi();
+            List<FluxTable> tables = queryApi.query(query, influxDBConfig.getOrg());
+
+            // ✅ THÊM LOG DEBUG
+            log.info("🔍 [InfluxDB Query] Số lượng tables trả về: {}", tables != null ? tables.size() : 0);
+
+            if (tables.isEmpty()) {
+                log.warn("❌ [InfluxDB Query] Không có dữ liệu cho device: {}", deviceId);
+                return null;
+            }
+
+            SensorDataDTO sensorData = new SensorDataDTO();
+            sensorData.setDeviceId(deviceId);
+
+            for (FluxTable table : tables) {
+                for (FluxRecord record : table.getRecords()) {
+                    String field = (String) record.getValueByKey("_field");
+                    Object value = record.getValue();
+                    Instant time = record.getTime();
+
+                    // ✅ THÊM LOG DEBUG
+                    log.info("🔍 [InfluxDB Query] Field: {}, Value: {}, Time: {}", field, value, time);
+
+                    if (time != null) {
+                        sensorData.setTimestamp(time);
+                    }
+
+                    if (value instanceof Number) {
+                        double doubleValue = ((Number) value).doubleValue();
+
+                        switch (field) {
+                            case "temperature":
+                                sensorData.setTemperature(doubleValue);
+                                break;
+                            case "humidity":
+                                sensorData.setHumidity(doubleValue);
+                                break;
+                            case "soil_moisture":
+                                sensorData.setSoilMoisture(doubleValue);
+                                // ✅ THÊM LOG QUAN TRỌNG
+                                log.info("✅ [InfluxDB Query] Tìm thấy soil_moisture: {}", doubleValue);
+                                break;
+                            case "light_intensity":
+                                sensorData.setLightIntensity(doubleValue);
+                                break;
+                            case "ph":
+                                sensorData.setPh(doubleValue);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            // ✅ THÊM LOG QUAN TRỌNG
+            log.info("✅ [InfluxDB Query] Dữ liệu cuối cùng: soilMoisture={}, temperature={}, humidity={}",
+                    sensorData.getSoilMoisture(),
+                    sensorData.getTemperature(),
+                    sensorData.getHumidity());
+
+            return sensorData;
+
+        } catch (Exception e) {
+            log.error("❌ [InfluxDB Query] Lỗi khi truy vấn dữ liệu cảm biến: {}", e.getMessage(), e);
             return null;
         }
-
-        return SensorDataDTO.fromInfluxRecord(rawData);
     }
 
     /**
