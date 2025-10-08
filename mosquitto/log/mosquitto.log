@@ -425,3 +425,6 @@
 2025-10-08T10:29:46: New connection from 172.18.0.1:43764 on port 1883.
 2025-10-08T10:29:46: New client connected from 172.18.0.1:43764 as auto-CA96EAEB-195B-A235-5374-C199B592D454 (p2, c1, k60).
 2025-10-08T10:29:49: Client auto-CA96EAEB-195B-A235-5374-C199B592D454 disconnected.
+2025-10-08T10:41:03: Client auto-32025C69-2B9E-21F0-F384-117BCE01CF3D closed its connection.
+2025-10-08T10:41:04: Client smart-farm-server_outbound closed its connection.
+2025-10-08T10:41:04: Client smart-farm-server_inbound closed its connection.

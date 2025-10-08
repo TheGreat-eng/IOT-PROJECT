@@ -41,8 +41,7 @@ public class InfluxDBConfig {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        // ✅ Fix encoding UTF-8
-        mapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, false);
+        // UTF-8 encoding is default for Jackson; no need to configure ESCAPE_NON_ASCII
         return mapper;
     }
 
