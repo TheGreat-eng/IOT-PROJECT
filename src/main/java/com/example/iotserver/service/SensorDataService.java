@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -269,5 +270,96 @@ public class SensorDataService {
         map.put("_field", record.getField());
         map.putAll(record.getValues());
         return map;
+    }
+
+    /**
+     * Lấy dữ liệu cảm biến mới nhất theo farmId
+     */
+    public SensorDataDTO getLatestSensorDataByFarmId(Long farmId) {
+        try {
+            String query = String.format(
+                    "from(bucket: \"%s\") " +
+                            "|> range(start: -1h) " +
+                            "|> filter(fn: (r) => r[\"_measurement\"] == \"sensor_data\") " +
+                            "|> filter(fn: (r) => r[\"farm_id\"] == \"%s\") " +
+                            "|> last()",
+                    influxDBConfig.getBucket(),
+                    farmId);
+
+            log.debug("🔍 [InfluxDB] Query for farmId {}: {}", farmId, query);
+
+            QueryApi queryApi = influxDBClient.getQueryApi();
+            List<FluxTable> tables = queryApi.query(query);
+
+            if (tables == null || tables.isEmpty()) {
+                log.warn("⚠️ [InfluxDB] Không có dữ liệu cho farmId: {}", farmId);
+                return null;
+            }
+
+            // Parse dữ liệu
+            SensorDataDTO data = new SensorDataDTO();
+            data.setFarmId(farmId);
+            data.setTimestamp(Instant.now());
+
+            for (FluxTable table : tables) {
+                for (FluxRecord record : table.getRecords()) {
+                    String field = (String) record.getField();
+                    Object value = record.getValue();
+
+                    switch (field) {
+                        case "temperature":
+                            data.setTemperature(((Number) value).doubleValue());
+                            break;
+                        case "humidity":
+                            data.setHumidity(((Number) value).doubleValue());
+                            break;
+                        case "soil_moisture":
+                            data.setSoilMoisture(((Number) value).doubleValue());
+                            break;
+                        case "light_intensity":
+                            data.setLightIntensity(((Number) value).doubleValue());
+                            break;
+                        // case "soil_ph":
+                        // data.setSoilPH(((Number) value).doubleValue());
+                        // break;
+                    }
+                }
+            }
+
+            log.info("✅ [InfluxDB] Lấy dữ liệu thành công cho farmId: {}", farmId);
+            return data;
+
+        } catch (Exception e) {
+            log.error("❌ [InfluxDB] Lỗi khi lấy dữ liệu farmId {}: {}", farmId, e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Lấy dữ liệu cảm biến tại thời điểm cụ thể
+     * (Dùng cho quy tắc 5: độ ẩm dao động)
+     */
+    public SensorDataDTO getSensorDataAt(Long farmId, LocalDateTime dateTime) {
+        try {
+            String query = String.format(
+                    "from(bucket: \"%s\") " +
+                            "|> range(start: %s, stop: %s) " +
+                            "|> filter(fn: (r) => r[\"_measurement\"] == \"sensor_data\") " +
+                            "|> filter(fn: (r) => r[\"farm_id\"] == \"%s\") " +
+                            "|> last()",
+                    influxDBConfig.getBucket(),
+                    dateTime.minusMinutes(30).toString() + "Z",
+                    dateTime.plusMinutes(30).toString() + "Z",
+                    farmId);
+
+            // Tương tự như trên...
+            // (Copy code parse từ method trên)
+
+            return null; // Implement tương tự getLatestSensorDataByFarmId
+
+        } catch (Exception e) {
+            log.error("❌ Lỗi getSensorDataAt: {}", e.getMessage());
+            return null;
+        }
     }
 }
