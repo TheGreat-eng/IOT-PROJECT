@@ -1,6 +1,7 @@
 package com.example.iotserver.service;
 
 import com.example.iotserver.dto.SensorDataDTO;
+import com.example.iotserver.dto.WeatherDTO;
 import com.example.iotserver.entity.Rule;
 import com.example.iotserver.entity.RuleCondition;
 import com.example.iotserver.entity.RuleExecutionLog;
@@ -29,6 +30,7 @@ public class RuleEngineService {
     private final DeviceService deviceService;
     private final WebSocketService webSocketService;
     private final ObjectMapper objectMapper;
+    private final WeatherService weatherService;
 
     /**
      * Chạy tất cả quy tắc đang kích hoạt
@@ -171,6 +173,8 @@ public class RuleEngineService {
                 return evaluateTimeCondition(condition, context);
             case DEVICE_STATUS:
                 return evaluateDeviceStatusCondition(condition, context);
+            case WEATHER: // ✅ THÊM MỚI
+                return evaluateWeatherCondition(condition, context);
             default:
                 log.warn("Loại điều kiện không được hỗ trợ: {}", condition.getType());
                 return false;
@@ -445,4 +449,58 @@ public class RuleEngineService {
             log.error("Lỗi khi lưu execution log: {}", e.getMessage());
         }
     }
+
+    private boolean evaluateWeatherCondition(RuleCondition condition, Map<String, Object> context) {
+        try {
+            Long farmId = condition.getRule().getFarm().getId();
+            WeatherDTO weather = weatherService.getCurrentWeather(farmId);
+
+            if (weather == null) {
+                log.warn("Không có dữ liệu thời tiết cho farm {}", farmId);
+                return false;
+            }
+
+            String field = condition.getField().toLowerCase();
+            Double actualValue = null;
+
+            switch (field) {
+                case "rain_amount":
+                case "rain":
+                    actualValue = weather.getRainAmount();
+                    break;
+                case "temperature":
+                    actualValue = weather.getTemperature();
+                    break;
+                case "humidity":
+                    actualValue = weather.getHumidity();
+                    break;
+                case "wind_speed":
+                    actualValue = weather.getWindSpeed();
+                    break;
+                default:
+                    log.warn("Trường thời tiết không được hỗ trợ: {}", field);
+                    return false;
+            }
+
+            if (actualValue == null) {
+                return false;
+            }
+
+            Double expectedValue = Double.parseDouble(condition.getValue());
+            context.put("weather_" + field, actualValue);
+            context.put("weather_" + field + "_expected", expectedValue);
+
+            boolean result = compareValues(actualValue, condition.getOperator(), expectedValue);
+
+            log.info("🌤️ Kiểm tra thời tiết: {} {} {} = {}",
+                    actualValue, condition.getOperator(), expectedValue, result);
+
+            return result;
+
+        } catch (Exception e) {
+            log.error("Lỗi khi kiểm tra điều kiện thời tiết: {}", e.getMessage());
+            return false;
+        }
+    }
+
 }
