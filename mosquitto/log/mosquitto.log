@@ -428,3 +428,30 @@
 2025-10-08T10:41:03: Client auto-32025C69-2B9E-21F0-F384-117BCE01CF3D closed its connection.
 2025-10-08T10:41:04: Client smart-farm-server_outbound closed its connection.
 2025-10-08T10:41:04: Client smart-farm-server_inbound closed its connection.
+2025-10-08T12:32:46: mosquitto version 2.0.22 starting
+2025-10-08T12:32:46: Config loaded from /mosquitto/config/mosquitto.conf.
+2025-10-08T12:32:46: Opening ipv4 listen socket on port 1883.
+2025-10-08T12:32:46: Opening ipv6 listen socket on port 1883.
+2025-10-08T12:32:46: Opening websockets listen socket on port 9001.
+2025-10-08T12:32:46: mosquitto version 2.0.22 running
+2025-10-08T12:32:59: New connection from 172.18.0.1:36682 on port 1883.
+2025-10-08T12:32:59: New client connected from 172.18.0.1:36682 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T12:33:54: New connection from 172.18.0.1:48818 on port 1883.
+2025-10-08T12:33:54: New client connected from 172.18.0.1:48818 as auto-03431019-4A80-30C9-8DAF-289874E997AE (p2, c1, k60).
+2025-10-08T12:33:57: Client auto-03431019-4A80-30C9-8DAF-289874E997AE disconnected.
+2025-10-08T12:34:10: New connection from 172.18.0.1:46188 on port 1883.
+2025-10-08T12:34:10: New client connected from 172.18.0.1:46188 as smart-farm-server_outbound (p2, c1, k60).
+2025-10-08T12:41:24: Client smart-farm-server_inbound disconnected.
+2025-10-08T12:41:29: Client smart-farm-server_outbound disconnected.
+2025-10-08T12:41:31: New connection from 172.18.0.1:47802 on port 1883.
+2025-10-08T12:41:32: New client connected from 172.18.0.1:47802 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T12:41:34: Client smart-farm-server_inbound closed its connection.
+2025-10-08T12:41:49: New connection from 172.18.0.1:35300 on port 1883.
+2025-10-08T12:41:49: New client connected from 172.18.0.1:35300 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-08T12:42:00: New connection from 172.18.0.1:52670 on port 1883.
+2025-10-08T12:42:00: New client connected from 172.18.0.1:52670 as smart-farm-server_outbound (p2, c1, k60).
+2025-10-08T13:02:41: Saving in-memory database to /mosquitto/data//mosquitto.db.
+2025-10-08T13:32:36: Saving in-memory database to /mosquitto/data//mosquitto.db.
+2025-10-08T14:02:34: Saving in-memory database to /mosquitto/data//mosquitto.db.
+2025-10-08T14:12:56: mosquitto version 2.0.22 terminating
+2025-10-08T14:12:56: Saving in-memory database to /mosquitto/data//mosquitto.db.
