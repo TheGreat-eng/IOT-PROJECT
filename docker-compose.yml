@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # MySQL Database
+  # ==================== MySQL Database ====================
   mysql:
     image: mysql:8.0
     container_name: smartfarm-mysql
@@ -10,14 +10,21 @@ services:
       MYSQL_DATABASE: smartfarm
       MYSQL_USER: smartfarm_user
       MYSQL_PASSWORD: smartfarm_pass
+      TZ: Asia/Ho_Chi_Minh
     ports:
-      - "3307:3306" # Changed from 3306:3306 to 3307:3306
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
       - smartfarm-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
-  # InfluxDB for time-series data
+  # ==================== InfluxDB (Time-series DB) ====================
   influxdb:
     image: influxdb:2.7
     container_name: smartfarm-influxdb
@@ -28,14 +35,21 @@ services:
       DOCKER_INFLUXDB_INIT_ORG: smart-farm
       DOCKER_INFLUXDB_INIT_BUCKET: sensor-data
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: my-super-secret-token
+      TZ: Asia/Ho_Chi_Minh
     ports:
       - "8086:8086"
     volumes:
       - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
     networks:
       - smartfarm-network
+    healthcheck:
+      test: ["CMD", "influx", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  # MQTT Broker (Mosquitto)
+  # ==================== MQTT Broker (Mosquitto) ====================
   mosquitto:
     image: eclipse-mosquitto:2.0
     container_name: smartfarm-mosquitto
@@ -48,8 +62,14 @@ services:
       - ./mosquitto/log:/mosquitto/log
     networks:
       - smartfarm-network
+    healthcheck:
+      test: ["CMD", "mosquitto_sub", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
-  # Redis for caching
+  # ==================== Redis (Caching) ====================
   redis:
     image: redis:7-alpine
     container_name: smartfarm-redis
@@ -59,34 +79,118 @@ services:
       - redis_data:/data
     networks:
       - smartfarm-network
-  # Spring Boot Backend (will build later)
-  # backend:
-  #   build: .
-  #   container_name: smartfarm-backend
-  #   environment:
-  #     SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/smartfarm
-  #     SPRING_DATASOURCE_USERNAME: smartfarm_user
-  #     SPRING_DATASOURCE_PASSWORD: smartfarm_pass
-  #     INFLUXDB_URL: http://influxdb:8086
-  #     INFLUXDB_TOKEN: my-super-secret-token
-  #     MQTT_BROKER_URL: tcp://mosquitto:1883
-  #     SPRING_REDIS_HOST: redis
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - mysql
-  #     - influxdb
-  #     - mosquitto
-  #     - redis
-  #   networks:
-  #     - smartfarm-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: redis-server --appendonly yes
+    restart: unless-stopped
 
+  # ==================== Spring Boot Backend ====================
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smartfarm-backend
+    environment:
+      # MySQL Configuration
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/smartfarm?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&useUnicode=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: smartfarm_user
+      SPRING_DATASOURCE_PASSWORD: smartfarm_pass
+      
+      # JPA/Hibernate
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
+      
+      # InfluxDB Configuration
+      INFLUXDB_URL: http://influxdb:8086
+      INFLUXDB_TOKEN: my-super-secret-token
+      INFLUXDB_ORG: smart-farm
+      INFLUXDB_BUCKET: sensor-data
+      
+      # MQTT Configuration
+      MQTT_BROKER_URL: tcp://mosquitto:1883
+      MQTT_CLIENT_ID: smart-farm-server
+      MQTT_USERNAME: ""
+      MQTT_PASSWORD: ""
+      
+      # Redis Configuration
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      
+      # JWT Configuration
+      JWT_SECRET: SmartFarmSecretKey2024VeryLongAndSecureKeyForJWTTokenGenerationAtLeast256Bits
+      JWT_EXPIRATION: 86400000
+      
+      # OpenWeather API
+      OPENWEATHER_API_KEY: 7884074a54f3d2baf0b79866f3edeb6c
+      OPENWEATHER_API_URL: https://api.openweathermap.org/data/2.5
+      
+      # AI Service (Python ML)
+      AI_SERVICE_URL: http://host.docker.internal:5001/predict
+      
+      # Email Configuration (Gmail)
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: tankhuonghoa4516@gmail.com
+      SPRING_MAIL_PASSWORD: pouuftawpckunjvd
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
+      
+      # Server Configuration
+      SERVER_PORT: 8080
+      TZ: Asia/Ho_Chi_Minh
+      
+      # Logging
+      LOGGING_LEVEL_ROOT: INFO
+      LOGGING_LEVEL_COM_EXAMPLE_IOTSERVER: DEBUG
+      
+      # Swagger
+      SPRINGDOC_API_DOCS_ENABLED: "true"
+      SPRINGDOC_SWAGGER_UI_ENABLED: "true"
+    
+    ports:
+      - "8080:8080"
+    
+    depends_on:
+      mysql:
+        condition: service_healthy
+      influxdb:
+        condition: service_healthy
+      mosquitto:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    
+    networks:
+      - smartfarm-network
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    
+    restart: unless-stopped
+    
+    volumes:
+      - ./logs:/app/logs
+
+# ==================== Volumes ====================
 volumes:
   mysql_data:
+    driver: local
   influxdb_data:
+    driver: local
+  influxdb_config:
+    driver: local
   redis_data:
+    driver: local
 
-
+# ==================== Networks ====================
 networks:
   smartfarm-network:
     driver: bridge
