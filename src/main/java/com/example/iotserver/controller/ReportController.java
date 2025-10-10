@@ -2,6 +2,9 @@ package com.example.iotserver.controller;
 
 import com.example.iotserver.dto.response.ApiResponse;
 import com.example.iotserver.service.ReportService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/reports")
 @RequiredArgsConstructor
+@Tag(name = "8. Reports", description = "API báo cáo và thống kê")
 public class ReportController {
 
     private final ReportService reportService;
@@ -23,7 +27,9 @@ public class ReportController {
      * GET /api/reports/summary?farmId=1
      */
     @GetMapping("/summary")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> getSummary(@RequestParam Long farmId) {
+    @Operation(summary = "Lấy báo cáo tổng hợp")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getSummary(
+            @Parameter(description = "ID nông trại") @RequestParam Long farmId) {
         Map<String, Object> summary = reportService.getDashboardSummary(farmId);
         return ResponseEntity.ok(ApiResponse.success(summary));
     }

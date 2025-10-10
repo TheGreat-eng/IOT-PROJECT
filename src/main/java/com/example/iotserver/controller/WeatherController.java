@@ -3,6 +3,9 @@ package com.example.iotserver.controller;
 import com.example.iotserver.dto.WeatherDTO;
 import com.example.iotserver.dto.response.ApiResponse;
 import com.example.iotserver.service.WeatherService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/weather")
 @RequiredArgsConstructor
+@Tag(name = "6. Weather", description = "API dữ liệu thời tiết")
 public class WeatherController {
 
     private final WeatherService weatherService;
@@ -26,8 +30,9 @@ public class WeatherController {
      * GET /api/weather/current?farmId=1
      */
     @GetMapping("/current")
+    @Operation(summary = "Lấy thời tiết hiện tại")
     public ResponseEntity<ApiResponse<WeatherDTO>> getCurrentWeather(
-            @RequestParam Long farmId) {
+            @Parameter(description = "ID nông trại") @RequestParam Long farmId) {
         WeatherDTO weather = weatherService.getCurrentWeather(farmId);
         return ResponseEntity.ok(ApiResponse.success(weather));
     }
@@ -37,8 +42,9 @@ public class WeatherController {
      * GET /api/weather/forecast?farmId=1
      */
     @GetMapping("/forecast")
+    @Operation(summary = "Lấy dự báo thời tiết 5 ngày")
     public ResponseEntity<ApiResponse<WeatherDTO>> getForecast(
-            @RequestParam Long farmId) {
+            @Parameter(description = "ID nông trại") @RequestParam Long farmId) {
         WeatherDTO forecast = weatherService.getWeatherForecast(farmId);
         return ResponseEntity.ok(ApiResponse.success(forecast));
     }
@@ -48,8 +54,9 @@ public class WeatherController {
      * POST /api/weather/update?farmId=1
      */
     @PostMapping("/update")
+    @Operation(summary = "Cập nhật thời tiết thủ công")
     public ResponseEntity<ApiResponse<String>> forceUpdate(
-            @RequestParam Long farmId) {
+            @Parameter(description = "ID nông trại") @RequestParam Long farmId) {
         weatherService.updateAllWeatherData();
         return ResponseEntity.ok(ApiResponse.success(
                 "Đã cập nhật thời tiết thành công",
@@ -61,8 +68,9 @@ public class WeatherController {
      * GET /api/weather/rule-impact?farmId=1
      */
     @GetMapping("/rule-impact")
+    @Operation(summary = "Kiểm tra ảnh hưởng thời tiết lên quy tắc tự động")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getRuleImpact(
-            @RequestParam Long farmId) {
+            @Parameter(description = "ID nông trại") @RequestParam Long farmId) {
 
         WeatherDTO weather = weatherService.getCurrentWeather(farmId);
         Map<String, Object> impact = new HashMap<>();

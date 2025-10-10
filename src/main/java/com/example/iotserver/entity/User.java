@@ -1,5 +1,6 @@
 package com.example.iotserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -44,6 +45,7 @@ public class User {
     private Boolean enabled = true;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @JsonManagedReference // ✅ Parent side
     private List<Farm> farms = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)

@@ -5,6 +5,9 @@ import com.example.iotserver.dto.RuleExecutionLogDTO;
 import com.example.iotserver.dto.response.ApiResponse;
 import com.example.iotserver.service.RuleEngineService;
 import com.example.iotserver.service.RuleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/rules")
 @RequiredArgsConstructor
+@Tag(name = "4. Rule Automation", description = "API quản lý quy tắc tự động hóa")
 public class RuleController {
 
     private final RuleService ruleService;
@@ -25,8 +29,9 @@ public class RuleController {
      * POST /api/rules?farmId=1
      */
     @PostMapping
+    @Operation(summary = "Tạo quy tắc tự động hóa mới")
     public ResponseEntity<ApiResponse<RuleDTO>> createRule(
-            @RequestParam Long farmId,
+            @Parameter(description = "ID nông trại") @RequestParam Long farmId,
             @RequestBody RuleDTO dto) {
         RuleDTO created = ruleService.createRule(farmId, dto);
         return ResponseEntity.ok(ApiResponse.success("Tạo quy tắc thành công", created));
@@ -37,6 +42,7 @@ public class RuleController {
      * PUT /api/rules/{id}
      */
     @PutMapping("/{id}")
+    @Operation(summary = "Cập nhật quy tắc")
     public ResponseEntity<ApiResponse<RuleDTO>> updateRule(
             @PathVariable Long id,
             @RequestBody RuleDTO dto) {
@@ -49,6 +55,7 @@ public class RuleController {
      * DELETE /api/rules/{id}
      */
     @DeleteMapping("/{id}")
+    @Operation(summary = "Xóa quy tắc")
     public ResponseEntity<ApiResponse<Void>> deleteRule(@PathVariable Long id) {
         ruleService.deleteRule(id);
         return ResponseEntity.ok(ApiResponse.success("Xóa quy tắc thành công", null));
@@ -59,6 +66,7 @@ public class RuleController {
      * GET /api/rules/{id}
      */
     @GetMapping("/{id}")
+    @Operation(summary = "Lấy chi tiết quy tắc")
     public ResponseEntity<ApiResponse<RuleDTO>> getRule(@PathVariable Long id) {
         RuleDTO rule = ruleService.getRule(id);
         return ResponseEntity.ok(ApiResponse.success(rule));
@@ -69,9 +77,10 @@ public class RuleController {
      * GET /api/rules?farmId=1
      */
     @GetMapping
+    @Operation(summary = "Lấy danh sách quy tắc của nông trại")
     public ResponseEntity<ApiResponse<List<RuleDTO>>> getRulesByFarm(
-            @RequestParam Long farmId,
-            @RequestParam(required = false, defaultValue = "false") Boolean enabledOnly) {
+            @Parameter(description = "ID nông trại") @RequestParam Long farmId,
+            @Parameter(description = "Chỉ lấy quy tắc đang bật") @RequestParam(required = false, defaultValue = "false") Boolean enabledOnly) {
 
         List<RuleDTO> rules;
         if (enabledOnly) {
@@ -89,6 +98,7 @@ public class RuleController {
      * Body: { "enabled": true }
      */
     @PatchMapping("/{id}/toggle")
+    @Operation(summary = "Bật/tắt quy tắc")
     public ResponseEntity<ApiResponse<RuleDTO>> toggleRule(
             @PathVariable Long id,
             @RequestBody Map<String, Boolean> request) {
@@ -104,9 +114,10 @@ public class RuleController {
      * GET /api/rules/{id}/logs?limit=50
      */
     @GetMapping("/{id}/logs")
+    @Operation(summary = "Lấy lịch sử thực thi quy tắc")
     public ResponseEntity<ApiResponse<List<RuleExecutionLogDTO>>> getExecutionLogs(
             @PathVariable Long id,
-            @RequestParam(defaultValue = "50") int limit) {
+            @Parameter(description = "Số bản ghi tối đa") @RequestParam(defaultValue = "50") int limit) {
         List<RuleExecutionLogDTO> logs = ruleService.getRuleExecutionLogs(id, limit);
         return ResponseEntity.ok(ApiResponse.success(logs));
     }
@@ -116,6 +127,7 @@ public class RuleController {
      * POST /api/rules/{id}/execute
      */
     @PostMapping("/{id}/execute")
+    @Operation(summary = "Chạy thử quy tắc thủ công")
     public ResponseEntity<ApiResponse<Map<String, Object>>> executeRule(@PathVariable Long id) {
         RuleDTO rule = ruleService.getRule(id);
 
@@ -135,8 +147,9 @@ public class RuleController {
      * GET /api/rules/stats?farmId=1
      */
     @GetMapping("/stats")
+    @Operation(summary = "Thống kê quy tắc")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getRuleStats(
-            @RequestParam Long farmId) {
+            @Parameter(description = "ID nông trại") @RequestParam Long farmId) {
         List<RuleDTO> allRules = ruleService.getRulesByFarm(farmId);
         List<RuleDTO> enabledRules = ruleService.getEnabledRules(farmId);
 

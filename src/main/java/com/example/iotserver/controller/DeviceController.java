@@ -5,6 +5,9 @@ import com.example.iotserver.dto.SensorDataDTO;
 import com.example.iotserver.dto.response.ApiResponse;
 import com.example.iotserver.service.DeviceService;
 import com.example.iotserver.service.SensorDataService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/devices")
 @RequiredArgsConstructor
+@Tag(name = "2. Device Management", description = "API quản lý thiết bị IoT (cảm biến, actuator)")
 public class DeviceController {
 
     private final DeviceService deviceService;
@@ -26,8 +30,9 @@ public class DeviceController {
      * POST /api/devices?farmId=1
      */
     @PostMapping
+    @Operation(summary = "Tạo thiết bị mới", description = "Đăng ký thiết bị IoT mới cho nông trại")
     public ResponseEntity<ApiResponse<DeviceDTO>> createDevice(
-            @RequestParam Long farmId,
+            @Parameter(description = "ID nông trại") @RequestParam Long farmId,
             @RequestBody DeviceDTO dto) {
         DeviceDTO created = deviceService.createDevice(farmId, dto);
         return ResponseEntity.ok(ApiResponse.success("Device created successfully", created));
@@ -38,6 +43,7 @@ public class DeviceController {
      * PUT /api/devices/{id}
      */
     @PutMapping("/{id}")
+    @Operation(summary = "Cập nhật thông tin thiết bị")
     public ResponseEntity<ApiResponse<DeviceDTO>> updateDevice(
             @PathVariable Long id,
             @RequestBody DeviceDTO dto) {
@@ -50,6 +56,7 @@ public class DeviceController {
      * DELETE /api/devices/{id}
      */
     @DeleteMapping("/{id}")
+    @Operation(summary = "Xóa thiết bị")
     public ResponseEntity<ApiResponse<Void>> deleteDevice(@PathVariable Long id) {
         deviceService.deleteDevice(id);
         return ResponseEntity.ok(ApiResponse.success("Device deleted successfully", null));
@@ -60,6 +67,7 @@ public class DeviceController {
      * GET /api/devices/{id}
      */
     @GetMapping("/{id}")
+    @Operation(summary = "Lấy thông tin thiết bị theo ID")
     public ResponseEntity<ApiResponse<DeviceDTO>> getDevice(@PathVariable Long id) {
         DeviceDTO device = deviceService.getDevice(id);
         return ResponseEntity.ok(ApiResponse.success(device));
@@ -70,6 +78,7 @@ public class DeviceController {
      * GET /api/devices/{deviceId}/full
      */
     @GetMapping("/{deviceId}/full")
+    @Operation(summary = "Lấy thiết bị kèm dữ liệu cảm biến mới nhất")
     public ResponseEntity<ApiResponse<DeviceDTO>> getDeviceWithData(@PathVariable String deviceId) {
         DeviceDTO device = deviceService.getDeviceWithLatestData(deviceId);
         return ResponseEntity.ok(ApiResponse.success(device));
@@ -80,10 +89,11 @@ public class DeviceController {
      * GET /api/devices?farmId=1
      */
     @GetMapping
+    @Operation(summary = "Lấy danh sách thiết bị của nông trại")
     public ResponseEntity<ApiResponse<List<DeviceDTO>>> getDevicesByFarm(
-            @RequestParam Long farmId,
-            @RequestParam(required = false) String type,
-            @RequestParam(defaultValue = "false") boolean withData) {
+            @Parameter(description = "ID nông trại") @RequestParam Long farmId,
+            @Parameter(description = "Loại thiết bị (SENSOR_DHT22, ACTUATOR_PUMP,...)") @RequestParam(required = false) String type,
+            @Parameter(description = "Bao gồm dữ liệu cảm biến") @RequestParam(defaultValue = "false") boolean withData) {
 
         List<DeviceDTO> devices;
         if (type != null) {
@@ -102,7 +112,9 @@ public class DeviceController {
      * GET /api/devices/online?farmId=1
      */
     @GetMapping("/online")
-    public ResponseEntity<ApiResponse<List<DeviceDTO>>> getOnlineDevices(@RequestParam Long farmId) {
+    @Operation(summary = "Lấy danh sách thiết bị đang online")
+    public ResponseEntity<ApiResponse<List<DeviceDTO>>> getOnlineDevices(
+            @Parameter(description = "ID nông trại") @RequestParam Long farmId) {
         List<DeviceDTO> devices = deviceService.getOnlineDevices(farmId);
         return ResponseEntity.ok(ApiResponse.success(devices));
     }
@@ -113,6 +125,7 @@ public class DeviceController {
      * Body: {"action": "turn_on", "duration": 300}
      */
     @PostMapping("/{deviceId}/control")
+    @Operation(summary = "Điều khiển thiết bị", description = "Gửi lệnh điều khiển (bật/tắt máy bơm, quạt,...)")
     public ResponseEntity<ApiResponse<Map<String, String>>> controlDevice(
             @PathVariable String deviceId,
             @RequestBody Map<String, Object> command) {
@@ -129,6 +142,7 @@ public class DeviceController {
      * GET /api/devices/{deviceId}/data/latest
      */
     @GetMapping("/{deviceId}/data/latest")
+    @Operation(summary = "Lấy dữ liệu cảm biến mới nhất")
     public ResponseEntity<ApiResponse<SensorDataDTO>> getLatestData(@PathVariable String deviceId) {
         SensorDataDTO data = sensorDataService.getLatestSensorData(deviceId);
         return ResponseEntity.ok(ApiResponse.success(data));
@@ -139,10 +153,11 @@ public class DeviceController {
      * GET /api/devices/{deviceId}/data?start=...&end=...
      */
     @GetMapping("/{deviceId}/data")
+    @Operation(summary = "Lấy dữ liệu cảm biến theo khoảng thời gian")
     public ResponseEntity<ApiResponse<List<SensorDataDTO>>> getSensorDataRange(
             @PathVariable String deviceId,
-            @RequestParam String start,
-            @RequestParam String end) {
+            @Parameter(description = "Thời gian bắt đầu (ISO format)") @RequestParam String start,
+            @Parameter(description = "Thời gian kết thúc (ISO format)") @RequestParam String end) {
         Instant startTime = Instant.parse(start);
         Instant endTime = Instant.parse(end);
 
@@ -155,11 +170,12 @@ public class DeviceController {
      * GET /api/devices/{deviceId}/data/aggregated?field=temperature&window=1h
      */
     @GetMapping("/{deviceId}/data/aggregated")
+    @Operation(summary = "Lấy dữ liệu tổng hợp cho biểu đồ")
     public ResponseEntity<ApiResponse<List<SensorDataDTO>>> getAggregatedData(
             @PathVariable String deviceId,
-            @RequestParam String field,
-            @RequestParam(defaultValue = "mean") String aggregation,
-            @RequestParam(defaultValue = "1h") String window) {
+            @Parameter(description = "Trường dữ liệu (temperature, humidity,...)") @RequestParam String field,
+            @Parameter(description = "Hàm tổng hợp (mean, max, min)") @RequestParam(defaultValue = "mean") String aggregation,
+            @Parameter(description = "Cửa sổ thời gian (1h, 1d,...)") @RequestParam(defaultValue = "1h") String window) {
         List<SensorDataDTO> data = sensorDataService.getAggregatedData(
                 deviceId, field, aggregation, window);
         return ResponseEntity.ok(ApiResponse.success(data));

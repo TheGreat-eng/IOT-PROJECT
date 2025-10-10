@@ -22,7 +22,7 @@ import java.util.Map;
 @RequestMapping("/api/plant-health")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Plant Health", description = "API quản lý cảnh báo sức khỏe cây trồng")
+@Tag(name = "9. Plant Health", description = "API quản lý cảnh báo sức khỏe cây trồng")
 public class PlantHealthController {
 
     private final PlantHealthService plantHealthService;

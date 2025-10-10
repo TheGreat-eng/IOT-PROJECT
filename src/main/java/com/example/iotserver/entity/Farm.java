@@ -1,5 +1,7 @@
 package com.example.iotserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,21 +24,25 @@ public class Farm {
     @Column(nullable = false)
     private String name;
 
-    @Column(length = 1000)
     private String description;
-
-    @Column(nullable = false)
     private String location;
+    private Double area;
 
-    @Column
-    private Double area; // Square meters
-
+    // ✅ Child side - Không serialize khi trả về JSON
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
+    @JsonBackReference
     private User owner;
 
-    @OneToMany(mappedBy = "farm", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Device> devices = new ArrayList<>();
+    // ✅ Parent side cho Zones
+    @OneToMany(mappedBy = "farm", cascade = CascadeType.ALL)
+    @JsonManagedReference("farm-zones")
+    private List<Zone> zones = new ArrayList<>();
+
+    // ✅ Parent side cho Rules
+    @OneToMany(mappedBy = "farm", cascade = CascadeType.ALL)
+    @JsonManagedReference("farm-rules")
+    private List<Rule> rules = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -46,8 +52,9 @@ public class Farm {
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = now;
+        updatedAt = now;
     }
 
     @PreUpdate

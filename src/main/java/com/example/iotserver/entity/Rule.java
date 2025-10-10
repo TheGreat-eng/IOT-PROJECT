@@ -1,5 +1,6 @@
 package com.example.iotserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,9 +27,10 @@ public class Rule {
     @Column(length = 1000)
     private String description; // Mô tả
 
-    // Quy tắc thuộc về Farm nào
+    // ✅ Child side - Không serialize khi trả về JSON
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "farm_id", nullable = false)
+    @JsonBackReference("farm-rules")
     private Farm farm;
 
     // Quy tắc có kích hoạt không?

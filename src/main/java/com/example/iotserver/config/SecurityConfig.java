@@ -34,10 +34,12 @@ public class SecurityConfig {
                                                                 "/api/auth/**",
                                                                 "/ws/**",
                                                                 "/error",
-                                                                // ✅ Thêm Swagger endpoints
-                                                                "/swagger-ui/**",
+                                                                // ==== THÊM CÁC DÒNG NÀY VÀO ĐÂY ====
                                                                 "/v3/api-docs/**",
-                                                                "/swagger-ui.html")
+                                                                "/swagger-ui/**",
+                                                                "/swagger-ui.html"
+                                                // ===================================
+                                                )
                                                 .permitAll()
 
                                                 // Tất cả endpoints khác cần authentication
@@ -47,7 +49,7 @@ public class SecurityConfig {
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                                // Add JWT filter before UsernamePasswordAuthenticationFilter
+                                // Add JWT filter
                                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
                 return http.build();

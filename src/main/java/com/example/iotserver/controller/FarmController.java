@@ -4,6 +4,9 @@ import com.example.iotserver.dto.FarmDTO;
 import com.example.iotserver.entity.User;
 import com.example.iotserver.service.FarmService;
 import com.example.iotserver.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/farms")
 @RequiredArgsConstructor
+@Tag(name = "3. Farm Management", description = "API quản lý nông trại")
 public class FarmController {
 
     private final FarmService farmService;
@@ -24,6 +28,7 @@ public class FarmController {
      * POST /api/farms
      */
     @PostMapping
+    @Operation(summary = "Tạo nông trại mới")
     public ResponseEntity<FarmDTO> createFarm(
             @RequestBody FarmDTO dto,
             Authentication authentication) {
@@ -37,6 +42,7 @@ public class FarmController {
      * PUT /api/farms/{id}
      */
     @PutMapping("/{id}")
+    @Operation(summary = "Cập nhật thông tin nông trại")
     public ResponseEntity<FarmDTO> updateFarm(
             @PathVariable Long id,
             @RequestBody FarmDTO dto,
@@ -51,6 +57,7 @@ public class FarmController {
      * DELETE /api/farms/{id}
      */
     @DeleteMapping("/{id}")
+    @Operation(summary = "Xóa nông trại")
     public ResponseEntity<Void> deleteFarm(
             @PathVariable Long id,
             Authentication authentication) {
@@ -64,6 +71,7 @@ public class FarmController {
      * GET /api/farms/{id}
      */
     @GetMapping("/{id}")
+    @Operation(summary = "Lấy thông tin nông trại theo ID")
     public ResponseEntity<FarmDTO> getFarm(
             @PathVariable Long id,
             Authentication authentication) {
@@ -77,6 +85,7 @@ public class FarmController {
      * GET /api/farms
      */
     @GetMapping
+    @Operation(summary = "Lấy danh sách nông trại của người dùng hiện tại")
     public ResponseEntity<List<FarmDTO>> getUserFarms(Authentication authentication) {
         Long userId = getUserIdFromAuth(authentication);
         List<FarmDTO> farms = farmService.getUserFarms(userId);
@@ -88,6 +97,7 @@ public class FarmController {
      * GET /api/farms/accessible
      */
     @GetMapping("/accessible")
+    @Operation(summary = "Lấy tất cả nông trại có quyền truy cập")
     public ResponseEntity<List<FarmDTO>> getAccessibleFarms(Authentication authentication) {
         Long userId = getUserIdFromAuth(authentication);
         List<FarmDTO> farms = farmService.getFarmsWithAccess(userId);
