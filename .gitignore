@@ -45,6 +45,9 @@ mqtt-test/testold.txt
 # Ignore sensitive application properties
 src/main/resources/application.properties
 
+# Keep example file
+!src/main/resources/application.properties.example
+
 # Database
 *.db
 *.sqlite

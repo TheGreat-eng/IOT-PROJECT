@@ -31,6 +31,7 @@ public class RuleEngineService {
     private final WebSocketService webSocketService;
     private final ObjectMapper objectMapper;
     private final WeatherService weatherService;
+    private final EmailService emailService;
 
     /**
      * Chạy tất cả quy tắc đang kích hoạt
@@ -419,9 +420,27 @@ public class RuleEngineService {
      * Gửi email
      */
     private String sendEmail(Rule rule, Rule.RuleAction action) {
-        // TODO: Triển khai gửi email thực tế
-        log.info("TODO: Gửi email - {}", action.getMessage());
-        return "Đã gửi email: " + action.getMessage();
+        // Lấy email của chủ nông trại
+        String ownerEmail = rule.getFarm().getOwner().getEmail();
+        if (ownerEmail == null || ownerEmail.isEmpty()) {
+            return "Lỗi: Không tìm thấy email của chủ nông trại.";
+        }
+
+        // Tạo nội dung email
+        String subject = "[SmartFarm] Cảnh báo từ quy tắc: " + rule.getName();
+        String text = "Xin chào,\n\n"
+                + "Hệ thống SmartFarm vừa kích hoạt một quy tắc tự động.\n\n"
+                + "Tên quy tắc: " + rule.getName() + "\n"
+                + "Nông trại: " + rule.getFarm().getName() + "\n"
+                + "Thông điệp: " + action.getMessage() + "\n\n"
+                + "Vui lòng kiểm tra hệ thống.\n\n"
+                + "Trân trọng,\n"
+                + "Đội ngũ SmartFarm.";
+
+        // Gọi service để gửi
+        emailService.sendSimpleMessage(ownerEmail, subject, text);
+
+        return "Đã gửi email cảnh báo tới: " + ownerEmail;
     }
 
     /**
