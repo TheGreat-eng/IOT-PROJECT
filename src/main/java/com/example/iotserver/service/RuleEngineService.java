@@ -326,8 +326,8 @@ public class RuleEngineService {
             case "light_intensity":
             case "lightintensity":
                 return data.getLightIntensity();
-            case "ph":
-                return data.getPh();
+            case "soilph":
+                return data.getSoilPH();
             default:
                 return null;
         }

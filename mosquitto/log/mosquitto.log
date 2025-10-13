@@ -1543,3 +1543,686 @@
 2025-10-10T08:33:35: New connection from ::1:47034 on port 1883.
 2025-10-10T08:33:35: New client connected from ::1:47034 as healthcheck (p2, c1, k60).
 2025-10-10T08:33:35: Client healthcheck closed its connection.
+2025-10-10T08:33:45: New connection from ::1:55162 on port 1883.
+2025-10-10T08:33:45: New client connected from ::1:55162 as healthcheck (p2, c1, k60).
+2025-10-10T08:33:45: Client healthcheck closed its connection.
+2025-10-10T08:33:55: New connection from ::1:45032 on port 1883.
+2025-10-10T08:33:55: New client connected from ::1:45032 as healthcheck (p2, c1, k60).
+2025-10-10T08:33:55: Client healthcheck closed its connection.
+2025-10-10T08:34:05: New connection from ::1:56010 on port 1883.
+2025-10-10T08:34:05: New client connected from ::1:56010 as healthcheck (p2, c1, k60).
+2025-10-10T08:34:05: Client healthcheck closed its connection.
+2025-10-10T08:34:15: New connection from ::1:57028 on port 1883.
+2025-10-10T08:34:15: New client connected from ::1:57028 as healthcheck (p2, c1, k60).
+2025-10-10T08:34:15: Client healthcheck closed its connection.
+2025-10-10T08:34:25: New connection from ::1:43118 on port 1883.
+2025-10-10T08:34:25: New client connected from ::1:43118 as healthcheck (p2, c1, k60).
+2025-10-10T08:34:25: Client healthcheck closed its connection.
+2025-10-10T08:34:35: New connection from ::1:49174 on port 1883.
+2025-10-10T08:34:35: New client connected from ::1:49174 as healthcheck (p2, c1, k60).
+2025-10-10T08:34:35: Client healthcheck closed its connection.
+2025-10-10T08:34:45: New connection from ::1:60648 on port 1883.
+2025-10-10T08:34:45: New client connected from ::1:60648 as healthcheck (p2, c1, k60).
+2025-10-10T08:34:45: Client healthcheck closed its connection.
+2025-10-10T08:34:55: New connection from ::1:39702 on port 1883.
+2025-10-10T08:34:55: New client connected from ::1:39702 as healthcheck (p2, c1, k60).
+2025-10-10T08:34:55: Client healthcheck closed its connection.
+2025-10-10T08:35:05: New connection from ::1:34392 on port 1883.
+2025-10-10T08:35:05: New client connected from ::1:34392 as healthcheck (p2, c1, k60).
+2025-10-10T08:35:05: Client healthcheck closed its connection.
+2025-10-10T08:35:15: New connection from ::1:57450 on port 1883.
+2025-10-10T08:35:15: New client connected from ::1:57450 as healthcheck (p2, c1, k60).
+2025-10-10T08:35:15: Client healthcheck closed its connection.
+2025-10-10T08:35:25: New connection from ::1:40544 on port 1883.
+2025-10-10T08:35:25: New client connected from ::1:40544 as healthcheck (p2, c1, k60).
+2025-10-10T08:35:25: Client healthcheck closed its connection.
+2025-10-10T08:35:35: New connection from ::1:51174 on port 1883.
+2025-10-10T08:35:35: New client connected from ::1:51174 as healthcheck (p2, c1, k60).
+2025-10-10T08:35:35: Client healthcheck closed its connection.
+2025-10-10T08:35:45: New connection from ::1:47444 on port 1883.
+2025-10-10T08:35:45: New client connected from ::1:47444 as healthcheck (p2, c1, k60).
+2025-10-10T08:35:45: Client healthcheck closed its connection.
+2025-10-10T08:35:55: New connection from ::1:50996 on port 1883.
+2025-10-10T08:35:55: New client connected from ::1:50996 as healthcheck (p2, c1, k60).
+2025-10-10T08:35:55: Client healthcheck closed its connection.
+2025-10-10T08:36:05: New connection from ::1:33220 on port 1883.
+2025-10-10T08:36:05: New client connected from ::1:33220 as healthcheck (p2, c1, k60).
+2025-10-10T08:36:05: Client healthcheck closed its connection.
+2025-10-10T08:36:11: Client smart-farm-server_inbound disconnected.
+2025-10-10T08:36:15: New connection from ::1:46934 on port 1883.
+2025-10-10T08:36:15: New client connected from ::1:46934 as healthcheck (p2, c1, k60).
+2025-10-10T08:36:15: Client healthcheck closed its connection.
+2025-10-10T08:36:16: Client smart-farm-server_outbound disconnected.
+2025-10-10T08:36:17: mosquitto version 2.0.22 terminating
+2025-10-10T08:36:17: Saving in-memory database to /mosquitto/data//mosquitto.db.
+2025-10-13T07:01:11: mosquitto version 2.0.22 starting
+2025-10-13T07:01:11: Config loaded from /mosquitto/config/mosquitto.conf.
+2025-10-13T07:01:11: Opening ipv4 listen socket on port 1883.
+2025-10-13T07:01:11: Opening ipv6 listen socket on port 1883.
+2025-10-13T07:01:11: Opening websockets listen socket on port 9001.
+2025-10-13T07:01:11: mosquitto version 2.0.22 running
+2025-10-13T07:01:21: New connection from ::1:37526 on port 1883.
+2025-10-13T07:01:21: New client connected from ::1:37526 as healthcheck (p2, c1, k60).
+2025-10-13T07:01:21: Client healthcheck closed its connection.
+2025-10-13T07:01:31: New connection from ::1:57148 on port 1883.
+2025-10-13T07:01:31: New client connected from ::1:57148 as healthcheck (p2, c1, k60).
+2025-10-13T07:01:31: Client healthcheck closed its connection.
+2025-10-13T07:01:39: New connection from 172.18.0.6:52140 on port 1883.
+2025-10-13T07:01:39: New client connected from 172.18.0.6:52140 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-13T07:01:41: New connection from ::1:50254 on port 1883.
+2025-10-13T07:01:41: New client connected from ::1:50254 as healthcheck (p2, c1, k60).
+2025-10-13T07:01:41: Client healthcheck closed its connection.
+2025-10-13T07:01:47: New connection from 172.18.0.1:48054 on port 1883.
+2025-10-13T07:01:47: Client smart-farm-server_inbound already connected, closing old connection.
+2025-10-13T07:01:47: New client connected from 172.18.0.1:48054 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-13T07:01:47: Client smart-farm-server_inbound disconnected.
+2025-10-13T07:01:48: New connection from 172.18.0.6:38104 on port 1883.
+2025-10-13T07:01:48: New client connected from 172.18.0.6:38104 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-13T07:01:51: New connection from ::1:58394 on port 1883.
+2025-10-13T07:01:51: New client connected from ::1:58394 as healthcheck (p2, c1, k60).
+2025-10-13T07:01:51: Client healthcheck closed its connection.
+2025-10-13T07:02:01: New connection from ::1:52174 on port 1883.
+2025-10-13T07:02:01: New client connected from ::1:52174 as healthcheck (p2, c1, k60).
+2025-10-13T07:02:01: Client healthcheck closed its connection.
+2025-10-13T07:02:11: New connection from ::1:57972 on port 1883.
+2025-10-13T07:02:11: New client connected from ::1:57972 as healthcheck (p2, c1, k60).
+2025-10-13T07:02:11: Client healthcheck closed its connection.
+2025-10-13T07:02:21: New connection from ::1:49940 on port 1883.
+2025-10-13T07:02:21: New client connected from ::1:49940 as healthcheck (p2, c1, k60).
+2025-10-13T07:02:21: Client healthcheck closed its connection.
+2025-10-13T07:02:31: New connection from ::1:37928 on port 1883.
+2025-10-13T07:02:31: New client connected from ::1:37928 as healthcheck (p2, c1, k60).
+2025-10-13T07:02:32: Client healthcheck closed its connection.
+2025-10-13T07:02:42: New connection from ::1:55082 on port 1883.
+2025-10-13T07:02:42: New client connected from ::1:55082 as healthcheck (p2, c1, k60).
+2025-10-13T07:02:42: Client healthcheck closed its connection.
+2025-10-13T07:02:52: New connection from ::1:39776 on port 1883.
+2025-10-13T07:02:52: New client connected from ::1:39776 as healthcheck (p2, c1, k60).
+2025-10-13T07:02:52: Client healthcheck closed its connection.
+2025-10-13T07:03:02: New connection from ::1:49148 on port 1883.
+2025-10-13T07:03:02: New client connected from ::1:49148 as healthcheck (p2, c1, k60).
+2025-10-13T07:03:02: Client healthcheck closed its connection.
+2025-10-13T07:03:12: New connection from ::1:41352 on port 1883.
+2025-10-13T07:03:12: New client connected from ::1:41352 as healthcheck (p2, c1, k60).
+2025-10-13T07:03:12: Client healthcheck closed its connection.
+2025-10-13T07:03:22: New connection from ::1:33474 on port 1883.
+2025-10-13T07:03:22: New client connected from ::1:33474 as healthcheck (p2, c1, k60).
+2025-10-13T07:03:22: Client healthcheck closed its connection.
+2025-10-13T07:03:32: New connection from ::1:43184 on port 1883.
+2025-10-13T07:03:32: New client connected from ::1:43184 as healthcheck (p2, c1, k60).
+2025-10-13T07:03:32: Client healthcheck closed its connection.
+2025-10-13T07:03:42: New connection from ::1:37098 on port 1883.
+2025-10-13T07:03:42: New client connected from ::1:37098 as healthcheck (p2, c1, k60).
+2025-10-13T07:03:42: Client healthcheck closed its connection.
+2025-10-13T07:03:52: New connection from ::1:58288 on port 1883.
+2025-10-13T07:03:52: New client connected from ::1:58288 as healthcheck (p2, c1, k60).
+2025-10-13T07:03:52: Client healthcheck closed its connection.
+2025-10-13T07:04:02: New connection from ::1:41024 on port 1883.
+2025-10-13T07:04:02: New client connected from ::1:41024 as healthcheck (p2, c1, k60).
+2025-10-13T07:04:02: Client healthcheck closed its connection.
+2025-10-13T07:04:12: New connection from ::1:53046 on port 1883.
+2025-10-13T07:04:12: New client connected from ::1:53046 as healthcheck (p2, c1, k60).
+2025-10-13T07:04:12: Client healthcheck closed its connection.
+2025-10-13T07:04:22: New connection from ::1:34756 on port 1883.
+2025-10-13T07:04:22: New client connected from ::1:34756 as healthcheck (p2, c1, k60).
+2025-10-13T07:04:22: Client healthcheck closed its connection.
+2025-10-13T07:04:32: New connection from ::1:40578 on port 1883.
+2025-10-13T07:04:32: New client connected from ::1:40578 as healthcheck (p2, c1, k60).
+2025-10-13T07:04:32: Client healthcheck closed its connection.
+2025-10-13T07:04:42: New connection from ::1:39686 on port 1883.
+2025-10-13T07:04:42: New client connected from ::1:39686 as healthcheck (p2, c1, k60).
+2025-10-13T07:04:42: Client healthcheck closed its connection.
+2025-10-13T07:04:52: New connection from ::1:56374 on port 1883.
+2025-10-13T07:04:52: New client connected from ::1:56374 as healthcheck (p2, c1, k60).
+2025-10-13T07:04:52: Client healthcheck closed its connection.
+2025-10-13T07:05:02: New connection from ::1:58664 on port 1883.
+2025-10-13T07:05:02: New client connected from ::1:58664 as healthcheck (p2, c1, k60).
+2025-10-13T07:05:02: Client healthcheck closed its connection.
+2025-10-13T07:05:13: New connection from ::1:48426 on port 1883.
+2025-10-13T07:05:13: New client connected from ::1:48426 as healthcheck (p2, c1, k60).
+2025-10-13T07:05:13: Client healthcheck closed its connection.
+2025-10-13T07:05:23: New connection from ::1:47694 on port 1883.
+2025-10-13T07:05:23: New client connected from ::1:47694 as healthcheck (p2, c1, k60).
+2025-10-13T07:05:23: Client healthcheck closed its connection.
+2025-10-13T07:05:33: New connection from ::1:39530 on port 1883.
+2025-10-13T07:05:33: New client connected from ::1:39530 as healthcheck (p2, c1, k60).
+2025-10-13T07:05:33: Client healthcheck closed its connection.
+2025-10-13T07:05:43: New connection from ::1:53126 on port 1883.
+2025-10-13T07:05:43: New client connected from ::1:53126 as healthcheck (p2, c1, k60).
+2025-10-13T07:05:43: Client healthcheck closed its connection.
+2025-10-13T07:05:53: New connection from ::1:60682 on port 1883.
+2025-10-13T07:05:53: New client connected from ::1:60682 as healthcheck (p2, c1, k60).
+2025-10-13T07:05:53: Client healthcheck closed its connection.
+2025-10-13T07:06:03: New connection from ::1:40626 on port 1883.
+2025-10-13T07:06:03: New client connected from ::1:40626 as healthcheck (p2, c1, k60).
+2025-10-13T07:06:03: Client healthcheck closed its connection.
+2025-10-13T07:06:13: New connection from ::1:45228 on port 1883.
+2025-10-13T07:06:13: New client connected from ::1:45228 as healthcheck (p2, c1, k60).
+2025-10-13T07:06:13: Client healthcheck closed its connection.
+2025-10-13T07:06:23: New connection from ::1:59484 on port 1883.
+2025-10-13T07:06:23: New client connected from ::1:59484 as healthcheck (p2, c1, k60).
+2025-10-13T07:06:23: Client healthcheck closed its connection.
+2025-10-13T07:06:33: New connection from ::1:34346 on port 1883.
+2025-10-13T07:06:33: New client connected from ::1:34346 as healthcheck (p2, c1, k60).
+2025-10-13T07:06:33: Client healthcheck closed its connection.
+2025-10-13T07:06:43: New connection from ::1:47704 on port 1883.
+2025-10-13T07:06:43: New client connected from ::1:47704 as healthcheck (p2, c1, k60).
+2025-10-13T07:06:43: Client healthcheck closed its connection.
+2025-10-13T07:06:53: New connection from ::1:51358 on port 1883.
+2025-10-13T07:06:53: New client connected from ::1:51358 as healthcheck (p2, c1, k60).
+2025-10-13T07:06:53: Client healthcheck closed its connection.
+2025-10-13T07:07:03: New connection from ::1:48336 on port 1883.
+2025-10-13T07:07:03: New client connected from ::1:48336 as healthcheck (p2, c1, k60).
+2025-10-13T07:07:03: Client healthcheck closed its connection.
+2025-10-13T07:07:13: New connection from ::1:49172 on port 1883.
+2025-10-13T07:07:13: New client connected from ::1:49172 as healthcheck (p2, c1, k60).
+2025-10-13T07:07:13: Client healthcheck closed its connection.
+2025-10-13T07:07:23: New connection from ::1:55408 on port 1883.
+2025-10-13T07:07:23: New client connected from ::1:55408 as healthcheck (p2, c1, k60).
+2025-10-13T07:07:23: Client healthcheck closed its connection.
+2025-10-13T07:07:33: New connection from ::1:43312 on port 1883.
+2025-10-13T07:07:33: New client connected from ::1:43312 as healthcheck (p2, c1, k60).
+2025-10-13T07:07:33: Client healthcheck closed its connection.
+2025-10-13T07:07:44: New connection from ::1:50004 on port 1883.
+2025-10-13T07:07:44: New client connected from ::1:50004 as healthcheck (p2, c1, k60).
+2025-10-13T07:07:44: Client healthcheck closed its connection.
+2025-10-13T07:07:54: New connection from ::1:56198 on port 1883.
+2025-10-13T07:07:54: New client connected from ::1:56198 as healthcheck (p2, c1, k60).
+2025-10-13T07:07:54: Client healthcheck closed its connection.
+2025-10-13T07:08:04: New connection from ::1:53874 on port 1883.
+2025-10-13T07:08:04: New client connected from ::1:53874 as healthcheck (p2, c1, k60).
+2025-10-13T07:08:04: Client healthcheck closed its connection.
+2025-10-13T07:08:14: New connection from ::1:54010 on port 1883.
+2025-10-13T07:08:14: New client connected from ::1:54010 as healthcheck (p2, c1, k60).
+2025-10-13T07:08:14: Client healthcheck closed its connection.
+2025-10-13T07:08:24: New connection from ::1:51048 on port 1883.
+2025-10-13T07:08:24: New client connected from ::1:51048 as healthcheck (p2, c1, k60).
+2025-10-13T07:08:24: Client healthcheck closed its connection.
+2025-10-13T07:08:34: New connection from ::1:55768 on port 1883.
+2025-10-13T07:08:34: New client connected from ::1:55768 as healthcheck (p2, c1, k60).
+2025-10-13T07:08:34: Client healthcheck closed its connection.
+2025-10-13T07:08:44: New connection from ::1:32804 on port 1883.
+2025-10-13T07:08:44: New client connected from ::1:32804 as healthcheck (p2, c1, k60).
+2025-10-13T07:08:44: Client healthcheck closed its connection.
+2025-10-13T07:08:54: New connection from ::1:53432 on port 1883.
+2025-10-13T07:08:54: New client connected from ::1:53432 as healthcheck (p2, c1, k60).
+2025-10-13T07:08:54: Client healthcheck closed its connection.
+2025-10-13T07:09:04: New connection from ::1:45586 on port 1883.
+2025-10-13T07:09:04: New client connected from ::1:45586 as healthcheck (p2, c1, k60).
+2025-10-13T07:09:04: Client healthcheck closed its connection.
+2025-10-13T07:09:14: New connection from ::1:43774 on port 1883.
+2025-10-13T07:09:14: New client connected from ::1:43774 as healthcheck (p2, c1, k60).
+2025-10-13T07:09:14: Client healthcheck closed its connection.
+2025-10-13T07:09:24: New connection from ::1:36046 on port 1883.
+2025-10-13T07:09:24: New client connected from ::1:36046 as healthcheck (p2, c1, k60).
+2025-10-13T07:09:24: Client healthcheck closed its connection.
+2025-10-13T07:09:34: New connection from ::1:40236 on port 1883.
+2025-10-13T07:09:34: New client connected from ::1:40236 as healthcheck (p2, c1, k60).
+2025-10-13T07:09:34: Client healthcheck closed its connection.
+2025-10-13T07:09:44: New connection from ::1:39620 on port 1883.
+2025-10-13T07:09:44: New client connected from ::1:39620 as healthcheck (p2, c1, k60).
+2025-10-13T07:09:44: Client healthcheck closed its connection.
+2025-10-13T07:09:54: New connection from ::1:36736 on port 1883.
+2025-10-13T07:09:54: New client connected from ::1:36736 as healthcheck (p2, c1, k60).
+2025-10-13T07:09:54: Client healthcheck closed its connection.
+2025-10-13T07:10:04: New connection from ::1:42520 on port 1883.
+2025-10-13T07:10:04: New client connected from ::1:42520 as healthcheck (p2, c1, k60).
+2025-10-13T07:10:04: Client healthcheck closed its connection.
+2025-10-13T07:10:14: New connection from ::1:45014 on port 1883.
+2025-10-13T07:10:14: New client connected from ::1:45014 as healthcheck (p2, c1, k60).
+2025-10-13T07:10:14: Client healthcheck closed its connection.
+2025-10-13T07:10:24: New connection from ::1:45718 on port 1883.
+2025-10-13T07:10:24: New client connected from ::1:45718 as healthcheck (p2, c1, k60).
+2025-10-13T07:10:25: Client healthcheck closed its connection.
+2025-10-13T07:10:34: New connection from ::1:40544 on port 1883.
+2025-10-13T07:10:34: New client connected from ::1:40544 as healthcheck (p2, c1, k60).
+2025-10-13T07:10:35: Client healthcheck closed its connection.
+2025-10-13T07:10:45: New connection from ::1:57350 on port 1883.
+2025-10-13T07:10:45: New client connected from ::1:57350 as healthcheck (p2, c1, k60).
+2025-10-13T07:10:45: Client healthcheck closed its connection.
+2025-10-13T07:10:55: New connection from ::1:46806 on port 1883.
+2025-10-13T07:10:55: New client connected from ::1:46806 as healthcheck (p2, c1, k60).
+2025-10-13T07:10:55: Client healthcheck closed its connection.
+2025-10-13T07:11:05: New connection from ::1:53064 on port 1883.
+2025-10-13T07:11:05: New client connected from ::1:53064 as healthcheck (p2, c1, k60).
+2025-10-13T07:11:05: Client healthcheck closed its connection.
+2025-10-13T07:11:15: New connection from ::1:48638 on port 1883.
+2025-10-13T07:11:15: New client connected from ::1:48638 as healthcheck (p2, c1, k60).
+2025-10-13T07:11:15: Client healthcheck closed its connection.
+2025-10-13T07:11:25: New connection from ::1:59184 on port 1883.
+2025-10-13T07:11:25: New client connected from ::1:59184 as healthcheck (p2, c1, k60).
+2025-10-13T07:11:25: Client healthcheck closed its connection.
+2025-10-13T07:11:35: New connection from ::1:53714 on port 1883.
+2025-10-13T07:11:35: New client connected from ::1:53714 as healthcheck (p2, c1, k60).
+2025-10-13T07:11:35: Client healthcheck closed its connection.
+2025-10-13T07:11:45: New connection from ::1:59142 on port 1883.
+2025-10-13T07:11:45: New client connected from ::1:59142 as healthcheck (p2, c1, k60).
+2025-10-13T07:11:45: Client healthcheck closed its connection.
+2025-10-13T07:11:55: New connection from ::1:33392 on port 1883.
+2025-10-13T07:11:55: New client connected from ::1:33392 as healthcheck (p2, c1, k60).
+2025-10-13T07:11:55: Client healthcheck closed its connection.
+2025-10-13T07:12:05: New connection from ::1:48276 on port 1883.
+2025-10-13T07:12:05: New client connected from ::1:48276 as healthcheck (p2, c1, k60).
+2025-10-13T07:12:05: Client healthcheck closed its connection.
+2025-10-13T07:12:15: New connection from ::1:55512 on port 1883.
+2025-10-13T07:12:15: New client connected from ::1:55512 as healthcheck (p2, c1, k60).
+2025-10-13T07:12:15: Client healthcheck closed its connection.
+2025-10-13T07:12:25: New connection from ::1:33662 on port 1883.
+2025-10-13T07:12:25: New client connected from ::1:33662 as healthcheck (p2, c1, k60).
+2025-10-13T07:12:25: Client healthcheck closed its connection.
+2025-10-13T07:12:35: New connection from ::1:52692 on port 1883.
+2025-10-13T07:12:35: New client connected from ::1:52692 as healthcheck (p2, c1, k60).
+2025-10-13T07:12:35: Client healthcheck closed its connection.
+2025-10-13T07:12:45: New connection from ::1:32800 on port 1883.
+2025-10-13T07:12:45: New client connected from ::1:32800 as healthcheck (p2, c1, k60).
+2025-10-13T07:12:45: Client healthcheck closed its connection.
+2025-10-13T07:12:55: New connection from ::1:35944 on port 1883.
+2025-10-13T07:12:55: New client connected from ::1:35944 as healthcheck (p2, c1, k60).
+2025-10-13T07:12:55: Client healthcheck closed its connection.
+2025-10-13T07:13:05: New connection from ::1:52766 on port 1883.
+2025-10-13T07:13:05: New client connected from ::1:52766 as healthcheck (p2, c1, k60).
+2025-10-13T07:13:05: Client healthcheck closed its connection.
+2025-10-13T07:13:15: New connection from ::1:42856 on port 1883.
+2025-10-13T07:13:15: New client connected from ::1:42856 as healthcheck (p2, c1, k60).
+2025-10-13T07:13:15: Client healthcheck closed its connection.
+2025-10-13T07:13:26: New connection from ::1:33736 on port 1883.
+2025-10-13T07:13:26: New client connected from ::1:33736 as healthcheck (p2, c1, k60).
+2025-10-13T07:13:26: Client healthcheck closed its connection.
+2025-10-13T07:13:36: New connection from ::1:42322 on port 1883.
+2025-10-13T07:13:36: New client connected from ::1:42322 as healthcheck (p2, c1, k60).
+2025-10-13T07:13:36: Client healthcheck closed its connection.
+2025-10-13T07:13:46: New connection from ::1:39498 on port 1883.
+2025-10-13T07:13:46: New client connected from ::1:39498 as healthcheck (p2, c1, k60).
+2025-10-13T07:13:46: Client healthcheck closed its connection.
+2025-10-13T07:13:56: New connection from ::1:59796 on port 1883.
+2025-10-13T07:13:56: New client connected from ::1:59796 as healthcheck (p2, c1, k60).
+2025-10-13T07:13:56: Client healthcheck closed its connection.
+2025-10-13T07:14:06: New connection from ::1:38814 on port 1883.
+2025-10-13T07:14:06: New client connected from ::1:38814 as healthcheck (p2, c1, k60).
+2025-10-13T07:14:06: Client healthcheck closed its connection.
+2025-10-13T07:14:12: Client smart-farm-server_inbound disconnected.
+2025-10-13T07:14:16: New connection from ::1:34304 on port 1883.
+2025-10-13T07:14:16: New client connected from ::1:34304 as healthcheck (p2, c1, k60).
+2025-10-13T07:14:16: Client healthcheck closed its connection.
+2025-10-13T07:14:18: mosquitto version 2.0.22 terminating
+2025-10-13T07:14:18: Saving in-memory database to /mosquitto/data//mosquitto.db.
+2025-10-13T07:14:47: mosquitto version 2.0.22 starting
+2025-10-13T07:14:47: Config loaded from /mosquitto/config/mosquitto.conf.
+2025-10-13T07:14:47: Opening ipv4 listen socket on port 1883.
+2025-10-13T07:14:47: Opening ipv6 listen socket on port 1883.
+2025-10-13T07:14:47: Opening websockets listen socket on port 9001.
+2025-10-13T07:14:47: mosquitto version 2.0.22 running
+2025-10-13T07:14:57: New connection from ::1:50852 on port 1883.
+2025-10-13T07:14:57: New client connected from ::1:50852 as healthcheck (p2, c1, k60).
+2025-10-13T07:14:57: Client healthcheck closed its connection.
+2025-10-13T07:15:07: New connection from ::1:60514 on port 1883.
+2025-10-13T07:15:07: New client connected from ::1:60514 as healthcheck (p2, c1, k60).
+2025-10-13T07:15:07: Client healthcheck closed its connection.
+2025-10-13T07:15:11: New connection from 172.18.0.6:45172 on port 1883.
+2025-10-13T07:15:11: New client connected from 172.18.0.6:45172 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-13T07:15:11: Client smart-farm-server_inbound disconnected.
+2025-10-13T07:15:17: New connection from ::1:37088 on port 1883.
+2025-10-13T07:15:17: New client connected from ::1:37088 as healthcheck (p2, c1, k60).
+2025-10-13T07:15:17: Client healthcheck closed its connection.
+2025-10-13T07:15:27: New connection from ::1:53782 on port 1883.
+2025-10-13T07:15:27: New client connected from ::1:53782 as healthcheck (p2, c1, k60).
+2025-10-13T07:15:27: Client healthcheck closed its connection.
+2025-10-13T07:15:29: New connection from 172.18.0.1:47760 on port 1883.
+2025-10-13T07:15:29: New client connected from 172.18.0.1:47760 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-13T07:15:37: New connection from ::1:48114 on port 1883.
+2025-10-13T07:15:37: New client connected from ::1:48114 as healthcheck (p2, c1, k60).
+2025-10-13T07:15:37: Client healthcheck closed its connection.
+2025-10-13T07:15:47: New connection from ::1:37254 on port 1883.
+2025-10-13T07:15:47: New client connected from ::1:37254 as healthcheck (p2, c1, k60).
+2025-10-13T07:15:47: Client healthcheck closed its connection.
+2025-10-13T07:15:57: New connection from ::1:36218 on port 1883.
+2025-10-13T07:15:57: New client connected from ::1:36218 as healthcheck (p2, c1, k60).
+2025-10-13T07:15:58: Client healthcheck closed its connection.
+2025-10-13T07:15:59: Client smart-farm-server_inbound closed its connection.
+2025-10-13T07:16:07: New connection from ::1:59874 on port 1883.
+2025-10-13T07:16:07: New client connected from ::1:59874 as healthcheck (p2, c1, k60).
+2025-10-13T07:16:08: Client healthcheck closed its connection.
+2025-10-13T07:16:15: mosquitto version 2.0.22 terminating
+2025-10-13T07:16:15: Saving in-memory database to /mosquitto/data//mosquitto.db.
+2025-10-13T07:20:57: mosquitto version 2.0.22 starting
+2025-10-13T07:20:57: Config loaded from /mosquitto/config/mosquitto.conf.
+2025-10-13T07:20:57: Opening ipv4 listen socket on port 1883.
+2025-10-13T07:20:57: Opening ipv6 listen socket on port 1883.
+2025-10-13T07:20:57: Opening websockets listen socket on port 9001.
+2025-10-13T07:20:57: mosquitto version 2.0.22 running
+2025-10-13T07:21:07: New connection from ::1:49026 on port 1883.
+2025-10-13T07:21:07: New client connected from ::1:49026 as healthcheck (p2, c1, k60).
+2025-10-13T07:21:07: Client healthcheck closed its connection.
+2025-10-13T07:21:17: New connection from ::1:55192 on port 1883.
+2025-10-13T07:21:17: New client connected from ::1:55192 as healthcheck (p2, c1, k60).
+2025-10-13T07:21:17: Client healthcheck closed its connection.
+2025-10-13T07:21:20: New connection from 172.18.0.6:44748 on port 1883.
+2025-10-13T07:21:20: New client connected from 172.18.0.6:44748 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-13T07:21:27: New connection from ::1:59726 on port 1883.
+2025-10-13T07:21:27: New client connected from ::1:59726 as healthcheck (p2, c1, k60).
+2025-10-13T07:21:27: Client healthcheck closed its connection.
+2025-10-13T07:21:37: New connection from ::1:45942 on port 1883.
+2025-10-13T07:21:37: New client connected from ::1:45942 as healthcheck (p2, c1, k60).
+2025-10-13T07:21:37: Client healthcheck closed its connection.
+2025-10-13T07:21:47: New connection from ::1:39268 on port 1883.
+2025-10-13T07:21:47: New client connected from ::1:39268 as healthcheck (p2, c1, k60).
+2025-10-13T07:21:47: Client healthcheck closed its connection.
+2025-10-13T07:21:57: New connection from ::1:56106 on port 1883.
+2025-10-13T07:21:57: New client connected from ::1:56106 as healthcheck (p2, c1, k60).
+2025-10-13T07:21:57: Client healthcheck closed its connection.
+2025-10-13T07:22:07: New connection from ::1:54848 on port 1883.
+2025-10-13T07:22:07: New client connected from ::1:54848 as healthcheck (p2, c1, k60).
+2025-10-13T07:22:07: Client healthcheck closed its connection.
+2025-10-13T07:22:17: New connection from ::1:47290 on port 1883.
+2025-10-13T07:22:17: New client connected from ::1:47290 as healthcheck (p2, c1, k60).
+2025-10-13T07:22:17: Client healthcheck closed its connection.
+2025-10-13T07:22:27: New connection from ::1:56424 on port 1883.
+2025-10-13T07:22:27: New client connected from ::1:56424 as healthcheck (p2, c1, k60).
+2025-10-13T07:22:27: Client healthcheck closed its connection.
+2025-10-13T07:22:37: New connection from ::1:34912 on port 1883.
+2025-10-13T07:22:37: New client connected from ::1:34912 as healthcheck (p2, c1, k60).
+2025-10-13T07:22:37: Client healthcheck closed its connection.
+2025-10-13T07:22:47: New connection from ::1:59994 on port 1883.
+2025-10-13T07:22:47: New client connected from ::1:59994 as healthcheck (p2, c1, k60).
+2025-10-13T07:22:47: Client healthcheck closed its connection.
+2025-10-13T07:22:58: New connection from ::1:43606 on port 1883.
+2025-10-13T07:22:58: New client connected from ::1:43606 as healthcheck (p2, c1, k60).
+2025-10-13T07:22:58: Client healthcheck closed its connection.
+2025-10-13T07:23:08: New connection from ::1:40084 on port 1883.
+2025-10-13T07:23:08: New client connected from ::1:40084 as healthcheck (p2, c1, k60).
+2025-10-13T07:23:08: Client healthcheck closed its connection.
+2025-10-13T07:23:18: New connection from ::1:58046 on port 1883.
+2025-10-13T07:23:18: New client connected from ::1:58046 as healthcheck (p2, c1, k60).
+2025-10-13T07:23:18: Client healthcheck closed its connection.
+2025-10-13T07:23:28: New connection from ::1:58028 on port 1883.
+2025-10-13T07:23:28: New client connected from ::1:58028 as healthcheck (p2, c1, k60).
+2025-10-13T07:23:28: Client healthcheck closed its connection.
+2025-10-13T07:23:38: New connection from ::1:56984 on port 1883.
+2025-10-13T07:23:38: New client connected from ::1:56984 as healthcheck (p2, c1, k60).
+2025-10-13T07:23:38: Client healthcheck closed its connection.
+2025-10-13T07:23:48: New connection from ::1:33094 on port 1883.
+2025-10-13T07:23:48: New client connected from ::1:33094 as healthcheck (p2, c1, k60).
+2025-10-13T07:23:48: Client healthcheck closed its connection.
+2025-10-13T07:23:58: New connection from ::1:54334 on port 1883.
+2025-10-13T07:23:58: New client connected from ::1:54334 as healthcheck (p2, c1, k60).
+2025-10-13T07:23:58: Client healthcheck closed its connection.
+2025-10-13T07:24:08: New connection from ::1:35172 on port 1883.
+2025-10-13T07:24:08: New client connected from ::1:35172 as healthcheck (p2, c1, k60).
+2025-10-13T07:24:08: Client healthcheck closed its connection.
+2025-10-13T07:24:18: New connection from ::1:42324 on port 1883.
+2025-10-13T07:24:18: New client connected from ::1:42324 as healthcheck (p2, c1, k60).
+2025-10-13T07:24:18: Client healthcheck closed its connection.
+2025-10-13T07:24:28: New connection from ::1:42662 on port 1883.
+2025-10-13T07:24:28: New client connected from ::1:42662 as healthcheck (p2, c1, k60).
+2025-10-13T07:24:28: Client healthcheck closed its connection.
+2025-10-13T07:24:38: New connection from ::1:60660 on port 1883.
+2025-10-13T07:24:38: New client connected from ::1:60660 as healthcheck (p2, c1, k60).
+2025-10-13T07:24:38: Client healthcheck closed its connection.
+2025-10-13T07:24:48: New connection from ::1:57978 on port 1883.
+2025-10-13T07:24:48: New client connected from ::1:57978 as healthcheck (p2, c1, k60).
+2025-10-13T07:24:48: Client healthcheck closed its connection.
+2025-10-13T07:24:58: New connection from ::1:38086 on port 1883.
+2025-10-13T07:24:58: New client connected from ::1:38086 as healthcheck (p2, c1, k60).
+2025-10-13T07:24:58: Client healthcheck closed its connection.
+2025-10-13T07:25:08: New connection from ::1:37738 on port 1883.
+2025-10-13T07:25:08: New client connected from ::1:37738 as healthcheck (p2, c1, k60).
+2025-10-13T07:25:08: Client healthcheck closed its connection.
+2025-10-13T07:25:18: New connection from ::1:44892 on port 1883.
+2025-10-13T07:25:18: New client connected from ::1:44892 as healthcheck (p2, c1, k60).
+2025-10-13T07:25:18: Client healthcheck closed its connection.
+2025-10-13T07:25:28: New connection from ::1:39144 on port 1883.
+2025-10-13T07:25:28: New client connected from ::1:39144 as healthcheck (p2, c1, k60).
+2025-10-13T07:25:28: Client healthcheck closed its connection.
+2025-10-13T07:25:38: New connection from ::1:41822 on port 1883.
+2025-10-13T07:25:38: New client connected from ::1:41822 as healthcheck (p2, c1, k60).
+2025-10-13T07:25:38: Client healthcheck closed its connection.
+2025-10-13T07:25:44: New connection from 172.18.0.1:59184 on port 1883.
+2025-10-13T07:25:44: New client connected from 172.18.0.1:59184 as auto-C263DF70-A1DB-938E-A50B-68B55F7E350D (p2, c1, k60).
+2025-10-13T07:25:46: Client auto-C263DF70-A1DB-938E-A50B-68B55F7E350D closed its connection.
+2025-10-13T07:25:48: New connection from ::1:48260 on port 1883.
+2025-10-13T07:25:48: New client connected from ::1:48260 as healthcheck (p2, c1, k60).
+2025-10-13T07:25:48: Client healthcheck closed its connection.
+2025-10-13T07:25:58: New connection from ::1:42714 on port 1883.
+2025-10-13T07:25:58: New client connected from ::1:42714 as healthcheck (p2, c1, k60).
+2025-10-13T07:25:58: Client healthcheck closed its connection.
+2025-10-13T07:26:00: New connection from 172.18.0.6:59074 on port 1883.
+2025-10-13T07:26:01: New client connected from 172.18.0.6:59074 as smart-farm-server_outbound (p2, c1, k60).
+2025-10-13T07:26:08: New connection from ::1:56852 on port 1883.
+2025-10-13T07:26:08: New client connected from ::1:56852 as healthcheck (p2, c1, k60).
+2025-10-13T07:26:08: Client healthcheck closed its connection.
+2025-10-13T07:26:18: New connection from ::1:60340 on port 1883.
+2025-10-13T07:26:18: New client connected from ::1:60340 as healthcheck (p2, c1, k60).
+2025-10-13T07:26:18: Client healthcheck closed its connection.
+2025-10-13T07:26:28: New connection from ::1:54980 on port 1883.
+2025-10-13T07:26:28: New client connected from ::1:54980 as healthcheck (p2, c1, k60).
+2025-10-13T07:26:28: Client healthcheck closed its connection.
+2025-10-13T07:26:38: New connection from ::1:33596 on port 1883.
+2025-10-13T07:26:38: New client connected from ::1:33596 as healthcheck (p2, c1, k60).
+2025-10-13T07:26:38: Client healthcheck closed its connection.
+2025-10-13T07:26:48: New connection from ::1:34480 on port 1883.
+2025-10-13T07:26:48: New client connected from ::1:34480 as healthcheck (p2, c1, k60).
+2025-10-13T07:26:49: Client healthcheck closed its connection.
+2025-10-13T07:26:58: New connection from ::1:39842 on port 1883.
+2025-10-13T07:26:58: New client connected from ::1:39842 as healthcheck (p2, c1, k60).
+2025-10-13T07:26:59: Client healthcheck closed its connection.
+2025-10-13T07:27:09: New connection from ::1:55420 on port 1883.
+2025-10-13T07:27:09: New client connected from ::1:55420 as healthcheck (p2, c1, k60).
+2025-10-13T07:27:09: Client healthcheck closed its connection.
+2025-10-13T07:27:19: New connection from ::1:34980 on port 1883.
+2025-10-13T07:27:19: New client connected from ::1:34980 as healthcheck (p2, c1, k60).
+2025-10-13T07:27:19: Client healthcheck closed its connection.
+2025-10-13T07:27:29: New connection from ::1:52148 on port 1883.
+2025-10-13T07:27:29: New client connected from ::1:52148 as healthcheck (p2, c1, k60).
+2025-10-13T07:27:29: New connection from 172.18.0.1:58184 on port 1883.
+2025-10-13T07:27:29: New client connected from 172.18.0.1:58184 as auto-0BB9F70D-278B-03A1-8CF2-A9D6E10B299C (p2, c1, k60).
+2025-10-13T07:27:29: Client healthcheck closed its connection.
+2025-10-13T07:27:31: Client auto-0BB9F70D-278B-03A1-8CF2-A9D6E10B299C closed its connection.
+2025-10-13T07:27:39: New connection from ::1:38396 on port 1883.
+2025-10-13T07:27:39: New client connected from ::1:38396 as healthcheck (p2, c1, k60).
+2025-10-13T07:27:39: Client healthcheck closed its connection.
+2025-10-13T07:27:49: New connection from ::1:53072 on port 1883.
+2025-10-13T07:27:49: New client connected from ::1:53072 as healthcheck (p2, c1, k60).
+2025-10-13T07:27:49: Client healthcheck closed its connection.
+2025-10-13T07:27:59: New connection from ::1:51942 on port 1883.
+2025-10-13T07:27:59: New client connected from ::1:51942 as healthcheck (p2, c1, k60).
+2025-10-13T07:27:59: Client healthcheck closed its connection.
+2025-10-13T07:28:09: New connection from ::1:59338 on port 1883.
+2025-10-13T07:28:09: New client connected from ::1:59338 as healthcheck (p2, c1, k60).
+2025-10-13T07:28:09: Client healthcheck closed its connection.
+2025-10-13T07:28:19: New connection from ::1:39092 on port 1883.
+2025-10-13T07:28:19: New client connected from ::1:39092 as healthcheck (p2, c1, k60).
+2025-10-13T07:28:19: Client healthcheck closed its connection.
+2025-10-13T07:28:29: New connection from ::1:60494 on port 1883.
+2025-10-13T07:28:29: New client connected from ::1:60494 as healthcheck (p2, c1, k60).
+2025-10-13T07:28:29: Client healthcheck closed its connection.
+2025-10-13T07:28:39: New connection from ::1:44302 on port 1883.
+2025-10-13T07:28:39: New client connected from ::1:44302 as healthcheck (p2, c1, k60).
+2025-10-13T07:28:39: Client healthcheck closed its connection.
+2025-10-13T07:28:48: New connection from 172.18.0.1:58762 on port 1883.
+2025-10-13T07:28:48: New client connected from 172.18.0.1:58762 as auto-E396566A-E034-401A-78A8-0AEBB13AFED6 (p2, c1, k60).
+2025-10-13T07:28:49: New connection from ::1:37122 on port 1883.
+2025-10-13T07:28:49: New client connected from ::1:37122 as healthcheck (p2, c1, k60).
+2025-10-13T07:28:49: Client healthcheck closed its connection.
+2025-10-13T07:28:50: Client auto-E396566A-E034-401A-78A8-0AEBB13AFED6 closed its connection.
+2025-10-13T07:28:59: New connection from ::1:51710 on port 1883.
+2025-10-13T07:28:59: New client connected from ::1:51710 as healthcheck (p2, c1, k60).
+2025-10-13T07:28:59: Client healthcheck closed its connection.
+2025-10-13T07:29:09: New connection from ::1:58306 on port 1883.
+2025-10-13T07:29:09: New client connected from ::1:58306 as healthcheck (p2, c1, k60).
+2025-10-13T07:29:09: Client healthcheck closed its connection.
+2025-10-13T07:29:19: New connection from ::1:53500 on port 1883.
+2025-10-13T07:29:19: New client connected from ::1:53500 as healthcheck (p2, c1, k60).
+2025-10-13T07:29:19: Client healthcheck closed its connection.
+2025-10-13T07:29:29: New connection from ::1:57674 on port 1883.
+2025-10-13T07:29:29: New client connected from ::1:57674 as healthcheck (p2, c1, k60).
+2025-10-13T07:29:29: Client healthcheck closed its connection.
+2025-10-13T07:29:39: New connection from ::1:54230 on port 1883.
+2025-10-13T07:29:39: New client connected from ::1:54230 as healthcheck (p2, c1, k60).
+2025-10-13T07:29:39: Client healthcheck closed its connection.
+2025-10-13T07:29:49: New connection from ::1:57700 on port 1883.
+2025-10-13T07:29:49: New client connected from ::1:57700 as healthcheck (p2, c1, k60).
+2025-10-13T07:29:49: Client healthcheck closed its connection.
+2025-10-13T07:29:59: New connection from ::1:35596 on port 1883.
+2025-10-13T07:29:59: New client connected from ::1:35596 as healthcheck (p2, c1, k60).
+2025-10-13T07:29:59: Client healthcheck closed its connection.
+2025-10-13T07:30:10: New connection from ::1:59026 on port 1883.
+2025-10-13T07:30:10: New client connected from ::1:59026 as healthcheck (p2, c1, k60).
+2025-10-13T07:30:10: Client healthcheck closed its connection.
+2025-10-13T07:30:20: New connection from ::1:36712 on port 1883.
+2025-10-13T07:30:20: New client connected from ::1:36712 as healthcheck (p2, c1, k60).
+2025-10-13T07:30:20: Client healthcheck closed its connection.
+2025-10-13T07:30:30: New connection from ::1:34468 on port 1883.
+2025-10-13T07:30:30: New client connected from ::1:34468 as healthcheck (p2, c1, k60).
+2025-10-13T07:30:30: Client healthcheck closed its connection.
+2025-10-13T07:30:40: New connection from ::1:60042 on port 1883.
+2025-10-13T07:30:40: New client connected from ::1:60042 as healthcheck (p2, c1, k60).
+2025-10-13T07:30:40: Client healthcheck closed its connection.
+2025-10-13T07:30:50: New connection from ::1:37714 on port 1883.
+2025-10-13T07:30:50: New client connected from ::1:37714 as healthcheck (p2, c1, k60).
+2025-10-13T07:30:50: Client healthcheck closed its connection.
+2025-10-13T07:31:00: New connection from ::1:52062 on port 1883.
+2025-10-13T07:31:00: New client connected from ::1:52062 as healthcheck (p2, c1, k60).
+2025-10-13T07:31:00: Client healthcheck closed its connection.
+2025-10-13T07:31:10: New connection from ::1:36828 on port 1883.
+2025-10-13T07:31:10: New client connected from ::1:36828 as healthcheck (p2, c1, k60).
+2025-10-13T07:31:10: Client healthcheck closed its connection.
+2025-10-13T07:31:20: New connection from ::1:52068 on port 1883.
+2025-10-13T07:31:20: New client connected from ::1:52068 as healthcheck (p2, c1, k60).
+2025-10-13T07:31:20: Client healthcheck closed its connection.
+2025-10-13T07:31:30: New connection from ::1:53626 on port 1883.
+2025-10-13T07:31:30: New client connected from ::1:53626 as healthcheck (p2, c1, k60).
+2025-10-13T07:31:30: Client healthcheck closed its connection.
+2025-10-13T07:31:40: New connection from ::1:37894 on port 1883.
+2025-10-13T07:31:40: New client connected from ::1:37894 as healthcheck (p2, c1, k60).
+2025-10-13T07:31:40: Client healthcheck closed its connection.
+2025-10-13T07:31:50: New connection from ::1:39366 on port 1883.
+2025-10-13T07:31:50: New client connected from ::1:39366 as healthcheck (p2, c1, k60).
+2025-10-13T07:31:50: Client healthcheck closed its connection.
+2025-10-13T07:32:00: New connection from ::1:59996 on port 1883.
+2025-10-13T07:32:00: New client connected from ::1:59996 as healthcheck (p2, c1, k60).
+2025-10-13T07:32:00: Client healthcheck closed its connection.
+2025-10-13T07:32:10: New connection from ::1:58866 on port 1883.
+2025-10-13T07:32:10: New client connected from ::1:58866 as healthcheck (p2, c1, k60).
+2025-10-13T07:32:10: Client healthcheck closed its connection.
+2025-10-13T07:32:20: New connection from ::1:52058 on port 1883.
+2025-10-13T07:32:20: New client connected from ::1:52058 as healthcheck (p2, c1, k60).
+2025-10-13T07:32:20: Client healthcheck closed its connection.
+2025-10-13T07:32:30: New connection from ::1:37920 on port 1883.
+2025-10-13T07:32:30: New client connected from ::1:37920 as healthcheck (p2, c1, k60).
+2025-10-13T07:32:30: Client healthcheck closed its connection.
+2025-10-13T07:32:40: New connection from ::1:53890 on port 1883.
+2025-10-13T07:32:40: New client connected from ::1:53890 as healthcheck (p2, c1, k60).
+2025-10-13T07:32:41: Client healthcheck closed its connection.
+2025-10-13T07:32:51: New connection from ::1:60812 on port 1883.
+2025-10-13T07:32:51: New client connected from ::1:60812 as healthcheck (p2, c1, k60).
+2025-10-13T07:32:51: Client healthcheck closed its connection.
+2025-10-13T07:33:01: New connection from ::1:32864 on port 1883.
+2025-10-13T07:33:01: New client connected from ::1:32864 as healthcheck (p2, c1, k60).
+2025-10-13T07:33:01: Client healthcheck closed its connection.
+2025-10-13T07:33:11: New connection from ::1:45070 on port 1883.
+2025-10-13T07:33:11: New client connected from ::1:45070 as healthcheck (p2, c1, k60).
+2025-10-13T07:33:11: Client healthcheck closed its connection.
+2025-10-13T07:33:21: New connection from ::1:47938 on port 1883.
+2025-10-13T07:33:21: New client connected from ::1:47938 as healthcheck (p2, c1, k60).
+2025-10-13T07:33:21: Client healthcheck closed its connection.
+2025-10-13T07:33:31: New connection from ::1:52014 on port 1883.
+2025-10-13T07:33:31: New client connected from ::1:52014 as healthcheck (p2, c1, k60).
+2025-10-13T07:33:31: Client healthcheck closed its connection.
+2025-10-13T07:33:41: New connection from ::1:33914 on port 1883.
+2025-10-13T07:33:41: New client connected from ::1:33914 as healthcheck (p2, c1, k60).
+2025-10-13T07:33:41: Client healthcheck closed its connection.
+2025-10-13T07:33:42: Client smart-farm-server_inbound disconnected.
+2025-10-13T07:33:47: Client smart-farm-server_outbound disconnected.
+2025-10-13T07:33:51: New connection from ::1:39194 on port 1883.
+2025-10-13T07:33:51: New client connected from ::1:39194 as healthcheck (p2, c1, k60).
+2025-10-13T07:33:51: Client healthcheck closed its connection.
+2025-10-13T07:34:01: New connection from ::1:42934 on port 1883.
+2025-10-13T07:34:01: New client connected from ::1:42934 as healthcheck (p2, c1, k60).
+2025-10-13T07:34:01: Client healthcheck closed its connection.
+2025-10-13T07:34:11: New connection from ::1:51318 on port 1883.
+2025-10-13T07:34:11: New client connected from ::1:51318 as healthcheck (p2, c1, k60).
+2025-10-13T07:34:11: Client healthcheck closed its connection.
+2025-10-13T07:34:21: New connection from ::1:59808 on port 1883.
+2025-10-13T07:34:21: New client connected from ::1:59808 as healthcheck (p2, c1, k60).
+2025-10-13T07:34:21: Client healthcheck closed its connection.
+2025-10-13T07:34:23: New connection from 172.18.0.1:47990 on port 1883.
+2025-10-13T07:34:23: New client connected from 172.18.0.1:47990 as smart-farm-server_inbound (p2, c1, k60).
+2025-10-13T07:34:29: New connection from 172.18.0.1:48006 on port 1883.
+2025-10-13T07:34:29: New client connected from 172.18.0.1:48006 as auto-EAE027AD-F059-4484-97EB-AB5C6D90A30D (p2, c1, k60).
+2025-10-13T07:34:31: Client auto-EAE027AD-F059-4484-97EB-AB5C6D90A30D closed its connection.
+2025-10-13T07:34:31: New connection from ::1:55700 on port 1883.
+2025-10-13T07:34:31: New client connected from ::1:55700 as healthcheck (p2, c1, k60).
+2025-10-13T07:34:31: Client healthcheck closed its connection.
+2025-10-13T07:34:33: New connection from 172.18.0.1:49838 on port 1883.
+2025-10-13T07:34:34: New client connected from 172.18.0.1:49838 as smart-farm-server_outbound (p2, c1, k60).
+2025-10-13T07:34:41: New connection from ::1:36552 on port 1883.
+2025-10-13T07:34:41: New client connected from ::1:36552 as healthcheck (p2, c1, k60).
+2025-10-13T07:34:41: Client healthcheck closed its connection.
+2025-10-13T07:34:51: New connection from ::1:52396 on port 1883.
+2025-10-13T07:34:51: New client connected from ::1:52396 as healthcheck (p2, c1, k60).
+2025-10-13T07:34:51: Client healthcheck closed its connection.
+2025-10-13T07:35:01: New connection from ::1:59408 on port 1883.
+2025-10-13T07:35:01: New client connected from ::1:59408 as healthcheck (p2, c1, k60).
+2025-10-13T07:35:01: Client healthcheck closed its connection.
+2025-10-13T07:35:11: New connection from ::1:43406 on port 1883.
+2025-10-13T07:35:11: New client connected from ::1:43406 as healthcheck (p2, c1, k60).
+2025-10-13T07:35:12: Client healthcheck closed its connection.
+2025-10-13T07:35:22: New connection from ::1:54508 on port 1883.
+2025-10-13T07:35:22: New client connected from ::1:54508 as healthcheck (p2, c1, k60).
+2025-10-13T07:35:22: Client healthcheck closed its connection.
+2025-10-13T07:35:32: New connection from ::1:49924 on port 1883.
+2025-10-13T07:35:32: New client connected from ::1:49924 as healthcheck (p2, c1, k60).
+2025-10-13T07:35:32: Client healthcheck closed its connection.
+2025-10-13T07:35:41: Client smart-farm-server_inbound closed its connection.
+2025-10-13T07:35:41: Client smart-farm-server_outbound closed its connection.
+2025-10-13T07:35:42: New connection from ::1:42178 on port 1883.
+2025-10-13T07:35:42: New client connected from ::1:42178 as healthcheck (p2, c1, k60).
+2025-10-13T07:35:42: Client healthcheck closed its connection.
+2025-10-13T07:35:52: New connection from ::1:36218 on port 1883.
+2025-10-13T07:35:52: New client connected from ::1:36218 as healthcheck (p2, c1, k60).
+2025-10-13T07:35:52: Client healthcheck closed its connection.
+2025-10-13T07:36:02: New connection from ::1:49342 on port 1883.
+2025-10-13T07:36:02: New client connected from ::1:49342 as healthcheck (p2, c1, k60).
+2025-10-13T07:36:02: Client healthcheck closed its connection.
+2025-10-13T07:36:12: New connection from ::1:58342 on port 1883.
+2025-10-13T07:36:12: New client connected from ::1:58342 as healthcheck (p2, c1, k60).
+2025-10-13T07:36:12: Client healthcheck closed its connection.
+2025-10-13T07:36:22: New connection from ::1:44296 on port 1883.
+2025-10-13T07:36:22: New client connected from ::1:44296 as healthcheck (p2, c1, k60).
+2025-10-13T07:36:22: Client healthcheck closed its connection.
+2025-10-13T07:36:32: New connection from ::1:53120 on port 1883.
+2025-10-13T07:36:32: New client connected from ::1:53120 as healthcheck (p2, c1, k60).
+2025-10-13T07:36:32: Client healthcheck closed its connection.
+2025-10-13T07:36:42: New connection from ::1:51250 on port 1883.
+2025-10-13T07:36:42: New client connected from ::1:51250 as healthcheck (p2, c1, k60).
+2025-10-13T07:36:42: Client healthcheck closed its connection.
+2025-10-13T07:36:52: New connection from ::1:57286 on port 1883.
+2025-10-13T07:36:52: New client connected from ::1:57286 as healthcheck (p2, c1, k60).
+2025-10-13T07:36:52: Client healthcheck closed its connection.
+2025-10-13T07:37:02: New connection from ::1:37574 on port 1883.
+2025-10-13T07:37:02: New client connected from ::1:37574 as healthcheck (p2, c1, k60).
+2025-10-13T07:37:02: Client healthcheck closed its connection.
+2025-10-13T07:37:12: New connection from ::1:53516 on port 1883.
+2025-10-13T07:37:12: New client connected from ::1:53516 as healthcheck (p2, c1, k60).
+2025-10-13T07:37:12: Client healthcheck closed its connection.
+2025-10-13T07:37:22: New connection from ::1:55618 on port 1883.
+2025-10-13T07:37:22: New client connected from ::1:55618 as healthcheck (p2, c1, k60).
+2025-10-13T07:37:22: Client healthcheck closed its connection.
+2025-10-13T07:37:32: New connection from ::1:59408 on port 1883.
+2025-10-13T07:37:32: New client connected from ::1:59408 as healthcheck (p2, c1, k60).
+2025-10-13T07:37:32: Client healthcheck closed its connection.
+2025-10-13T07:37:42: New connection from ::1:39702 on port 1883.
+2025-10-13T07:37:42: New client connected from ::1:39702 as healthcheck (p2, c1, k60).
+2025-10-13T07:37:43: Client healthcheck closed its connection.
+2025-10-13T07:37:53: New connection from ::1:40436 on port 1883.
+2025-10-13T07:37:53: New client connected from ::1:40436 as healthcheck (p2, c1, k60).
+2025-10-13T07:37:53: Client healthcheck closed its connection.
+2025-10-13T07:38:03: New connection from ::1:56538 on port 1883.
+2025-10-13T07:38:03: New client connected from ::1:56538 as healthcheck (p2, c1, k60).
+2025-10-13T07:38:03: Client healthcheck closed its connection.
+2025-10-13T07:38:13: New connection from ::1:34524 on port 1883.
+2025-10-13T07:38:13: New client connected from ::1:34524 as healthcheck (p2, c1, k60).
+2025-10-13T07:38:13: Client healthcheck closed its connection.
+2025-10-13T07:38:23: New connection from ::1:54320 on port 1883.
+2025-10-13T07:38:23: New client connected from ::1:54320 as healthcheck (p2, c1, k60).
+2025-10-13T07:38:23: Client healthcheck closed its connection.

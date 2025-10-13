@@ -106,7 +106,7 @@ public class PlantHealthService {
         checkLowLight(farmId, data).ifPresent(alerts::add);
 
         // Quy tắc 7: pH bất thường
-        // checkPHAbnormal(farmId, data).ifPresent(alerts::add);
+        checkPHAbnormal(farmId, data).ifPresent(alerts::add);
 
         return alerts;
     }
@@ -276,42 +276,40 @@ public class PlantHealthService {
      * QUY TẮC 7: Phát hiện pH bất thường ⚗️
      * Điều kiện: pH < 5.0 hoặc pH > 7.5
      */
-    // private Optional<PlantHealthAlert> checkPHAbnormal(Long farmId, SensorDataDTO
-    // data) {
-    // if (data.getSoilPH() != null) {
-    // boolean abnormal = data.getSoilPH() < PH_MIN || data.getSoilPH() > PH_MAX;
+    private Optional<PlantHealthAlert> checkPHAbnormal(Long farmId, SensorDataDTO data) {
+        if (data.getSoilPH() != null) {
+            boolean abnormal = data.getSoilPH() < PH_MIN || data.getSoilPH() > PH_MAX;
 
-    // if (abnormal) {
-    // log.warn("⚗️ Phát hiện pH bất thường! pH: {}", data.getSoilPH());
+            if (abnormal) {
+                log.warn("⚗️ Phát hiện pH bất thường! pH: {}", data.getSoilPH());
 
-    // String description;
-    // String suggestion;
+                String description;
+                String suggestion;
 
-    // // if (data.getSoilPH() < PH_MIN) {
-    // // description = String.format(
-    // // "Đất quá chua - pH %.1f thấp hơn mức an toàn",
-    // // data.getSoilPH());
-    // // suggestion = "Bón vôi để tăng pH, sử dụng phân hữu cơ, tránh phân hóa
-    // học";
-    // // } else {
-    // // description = String.format(
-    // // "Đất quá kiềm - pH %.1f cao hơn mức an toàn",
-    // // data.getSoilPH());
-    // // suggestion = "Bón lưu huỳnh hoặc phân chua để giảm pH, tránh dùng vôi";
-    // // }
+                if (data.getSoilPH() < PH_MIN) {
+                    description = String.format(
+                            "Đất quá chua - pH %.1f thấp hơn mức an toàn",
+                            data.getSoilPH());
+                    suggestion = "Bón vôi để tăng pH, sử dụng phân hữu cơ, tránh phân hóa học";
+                } else {
+                    description = String.format(
+                            "Đất quá kiềm - pH %.1f cao hơn mức an toàn",
+                            data.getSoilPH());
+                    suggestion = "Bón lưu huỳnh hoặc phân chua để giảm pH, tránh dùng vôi";
+                }
 
-    // return Optional.of(PlantHealthAlert.builder()
-    // .farmId(farmId)
-    // .alertType(AlertType.PH_ABNORMAL)
-    // .severity(Severity.MEDIUM)
-    // .description(description)
-    // .suggestion(suggestion)
-    // .conditions(createConditionsJson(data))
-    // .build());
-    // }
-    // }
-    // return Optional.empty();
-    // }
+                return Optional.of(PlantHealthAlert.builder()
+                        .farmId(farmId)
+                        .alertType(AlertType.PH_ABNORMAL)
+                        .severity(Severity.MEDIUM)
+                        .description(description)
+                        .suggestion(suggestion)
+                        .conditions(createConditionsJson(data))
+                        .build());
+            }
+        }
+        return Optional.empty();
+    }
 
     /**
      * Tính điểm sức khỏe dựa trên số lượng và mức độ cảnh báo
@@ -367,7 +365,7 @@ public class PlantHealthService {
             conditions.put("humidity", latestData.getHumidity());
             conditions.put("soilMoisture", latestData.getSoilMoisture());
             conditions.put("lightIntensity", latestData.getLightIntensity());
-            // conditions.put("soilPH", latestData.getSoilPH());
+            conditions.put("soilPH", latestData.getSoilPH());
         }
 
         // Xác định trạng thái
@@ -456,9 +454,9 @@ public class PlantHealthService {
         if (data.getLightIntensity() != null) {
             conditions.put("lightIntensity", data.getLightIntensity());
         }
-        // if (data.getSoilPH() != null) {
-        // conditions.put("soilPH", data.getSoilPH());
-        // }
+        if (data.getSoilPH() != null) {
+            conditions.put("soilPH", data.getSoilPH());
+        }
 
         return conditions;
     }

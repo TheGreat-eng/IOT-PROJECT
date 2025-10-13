@@ -233,8 +233,8 @@ public class DeviceService {
         if (sensorData.getLightIntensity() != null) {
             map.put("lightIntensity", sensorData.getLightIntensity());
         }
-        if (sensorData.getPh() != null) {
-            map.put("ph", sensorData.getPh());
+        if (sensorData.getSoilPH() != null) {
+            map.put("soilPH", sensorData.getSoilPH());
         }
         if (sensorData.getTimestamp() != null) {
             map.put("timestamp", sensorData.getTimestamp().toString());

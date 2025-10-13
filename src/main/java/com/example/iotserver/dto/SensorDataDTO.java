@@ -34,7 +34,7 @@ public class SensorDataDTO {
     private Double humidity;
     private Double soilMoisture;
     private Double lightIntensity;
-    private Double ph;
+    private Double soilPH;
 
     // Additional metadata
     private Long farmId;
@@ -71,8 +71,8 @@ public class SensorDataDTO {
         if (payload.containsKey("lightIntensity")) {
             builder.lightIntensity(parseDouble(payload.get("lightIntensity")));
         }
-        if (payload.containsKey("ph")) {
-            builder.ph(parseDouble(payload.get("ph")));
+        if (payload.containsKey("soilPH")) {
+            builder.soilPH(parseDouble(payload.get("soilPH")));
         }
         if (payload.containsKey("sensorType")) {
             builder.sensorType(payload.get("sensorType").toString());
@@ -105,7 +105,7 @@ public class SensorDataDTO {
                 case "humidity" -> builder.humidity(value);
                 case "soil_moisture" -> builder.soilMoisture(value);
                 case "light_intensity" -> builder.lightIntensity(value);
-                case "ph" -> builder.ph(value);
+                case "soilPH" -> builder.soilPH(value);
             }
         }
 

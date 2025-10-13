@@ -20,7 +20,11 @@ def publish_data():
     payload = {
         "deviceId": DEVICE_ID,
         "sensorType": "SOIL_MOISTURE",
-        "soilMoisture": 25.0, # Giá trị < 30 để kích hoạt rule
+        "lightIntensity": 300,  # ✅ THÊM lightIntensity
+        "soilMoisture": 25.0,
+        "temperature": 28.5,
+        "humidity": 65.0,
+        "soilPH": 4.2,  # ✅ THÊM soilPH BẤT THƯỜNG
         "timestamp": datetime.now().isoformat()
     }
     payload_json = json.dumps(payload)

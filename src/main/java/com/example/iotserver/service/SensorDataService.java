@@ -54,8 +54,8 @@ public class SensorDataService {
             if (data.getLightIntensity() != null) {
                 point.addField("light_intensity", data.getLightIntensity());
             }
-            if (data.getPh() != null) {
-                point.addField("ph", data.getPh());
+            if (data.getSoilPH() != null) {
+                point.addField("soilPH", data.getSoilPH());
             }
 
             writeApi.writePoint(point);
@@ -131,8 +131,8 @@ public class SensorDataService {
                             case "light_intensity":
                                 sensorData.setLightIntensity(doubleValue);
                                 break;
-                            case "ph":
-                                sensorData.setPh(doubleValue);
+                            case "soilPH":
+                                sensorData.setSoilPH(doubleValue);
                                 break;
                         }
                     }
@@ -319,9 +319,9 @@ public class SensorDataService {
                         case "light_intensity":
                             data.setLightIntensity(((Number) value).doubleValue());
                             break;
-                        // case "soil_ph":
-                        // data.setSoilPH(((Number) value).doubleValue());
-                        // break;
+                        case "soil_ph":
+                            data.setSoilPH(((Number) value).doubleValue());
+                            break;
                     }
                 }
             }
