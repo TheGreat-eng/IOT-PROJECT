@@ -140,10 +140,13 @@ public class SensorDataService {
             }
 
             // ✅ THÊM LOG QUAN TRỌNG
-            log.info("✅ [InfluxDB Query] Dữ liệu cuối cùng: soilMoisture={}, temperature={}, humidity={}",
+            log.info(
+                    "✅ [InfluxDB Query] Dữ liệu cuối cùng: soilMoisture={}, temperature={}, humidity={}, lightIntensity={}, soilPH={}",
                     sensorData.getSoilMoisture(),
                     sensorData.getTemperature(),
-                    sensorData.getHumidity());
+                    sensorData.getHumidity(),
+                    sensorData.getLightIntensity(),
+                    sensorData.getSoilPH());
 
             return sensorData;
 
@@ -352,13 +355,51 @@ public class SensorDataService {
                     dateTime.plusMinutes(30).toString() + "Z",
                     farmId);
 
-            // Tương tự như trên...
-            // (Copy code parse từ method trên)
+            log.debug("🔍 [InfluxDB] Query for farmId {}: {}", farmId, query);
 
-            return null; // Implement tương tự getLatestSensorDataByFarmId
+            QueryApi queryApi = influxDBClient.getQueryApi();
+            List<FluxTable> tables = queryApi.query(query);
+
+            if (tables == null || tables.isEmpty()) {
+                log.warn("⚠️ [InfluxDB] Không có dữ liệu cho farmId: {}", farmId);
+                return null;
+            }
+
+            // Parse dữ liệu
+            SensorDataDTO data = new SensorDataDTO();
+            data.setFarmId(farmId);
+            data.setTimestamp(Instant.now());
+
+            for (FluxTable table : tables) {
+                for (FluxRecord record : table.getRecords()) {
+                    String field = (String) record.getField();
+                    Object value = record.getValue();
+
+                    switch (field) {
+                        case "temperature":
+                            data.setTemperature(((Number) value).doubleValue());
+                            break;
+                        case "humidity":
+                            data.setHumidity(((Number) value).doubleValue());
+                            break;
+                        case "soil_moisture":
+                            data.setSoilMoisture(((Number) value).doubleValue());
+                            break;
+                        case "light_intensity":
+                            data.setLightIntensity(((Number) value).doubleValue());
+                            break;
+                        case "soil_ph":
+                            data.setSoilPH(((Number) value).doubleValue());
+                            break;
+                    }
+                }
+            }
+
+            log.info("✅ [InfluxDB] Lấy dữ liệu thành công cho farmId: {}", farmId);
+            return data;
 
         } catch (Exception e) {
-            log.error("❌ Lỗi getSensorDataAt: {}", e.getMessage());
+            log.error("❌ [InfluxDB] Lỗi khi lấy dữ liệu farmId {}: {}", farmId, e.getMessage());
             return null;
         }
     }

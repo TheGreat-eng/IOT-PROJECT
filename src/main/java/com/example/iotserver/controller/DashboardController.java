@@ -83,10 +83,22 @@ public class DashboardController {
                                 .mapToDouble(data -> (Double) data.get("soil_moisture"))
                                 .average()
                                 .orElse(0.0);
+                double avgLightIntensity = latestData.values().stream()
+                                .filter(data -> data.containsKey("light_intensity"))
+                                .mapToDouble(data -> (Double) data.get("light_intensity"))
+                                .average()
+                                .orElse(0.0);
+                double avgSoilPH = latestData.values().stream()
+                                .filter(data -> data.containsKey("soil_ph"))
+                                .mapToDouble(data -> (Double) data.get("soil_ph"))
+                                .average()
+                                .orElse(0.0);
 
                 stats.put("avgTemperature", Math.round(avgTemperature * 10) / 10.0);
                 stats.put("avgHumidity", Math.round(avgHumidity * 10) / 10.0);
                 stats.put("avgSoilMoisture", Math.round(avgSoilMoisture * 10) / 10.0);
+                stats.put("avgLightIntensity", Math.round(avgLightIntensity * 10) / 10.0);
+                stats.put("avgSoilPH", Math.round(avgSoilPH * 10) / 10.0);
                 stats.put("timestamp", System.currentTimeMillis());
 
                 return ResponseEntity.ok(stats);
