@@ -56,7 +56,7 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setFullName(request.getFullName());
         user.setPhoneNumber(request.getPhone());
-        user.setRole(User.Role.USER); // ✅ FIX: Đổi thành User.Role.USER
+        user.setRole(UserRole.FARMER); // ✅ FIX: Đổi thành UserRole.FARMER
 
         User savedUser = userService.save(user);
 
@@ -93,7 +93,7 @@ public class AuthController {
                 .userId(user.getId())
                 .email(user.getEmail())
                 .fullName(user.getFullName())
-                .role(user.getRole() == User.Role.ADMIN ? UserRole.ADMIN : UserRole.FARMER)
+                .role(user.getRole()) // <-- THAY ĐỔI Ở ĐÂY, đơn giản hơn nhiều
                 .build();
 
         return ResponseEntity.ok(response);

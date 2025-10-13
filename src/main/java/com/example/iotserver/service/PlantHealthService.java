@@ -53,7 +53,6 @@ public class PlantHealthService {
     public PlantHealthDTO analyzeHealth(Long farmId) {
         log.info("🌿 Bắt đầu phân tích sức khỏe cho nông trại: {}", farmId);
 
-        // Lấy dữ liệu cảm biến mới nhất
         SensorDataDTO latestData = sensorDataService.getLatestSensorDataByFarmId(farmId);
 
         if (latestData == null) {
@@ -61,52 +60,60 @@ public class PlantHealthService {
             return createEmptyHealthReport(farmId);
         }
 
-        // Kiểm tra tất cả các quy tắc
-        List<PlantHealthAlert> newAlerts = checkAllRules(farmId, latestData);
+        // BƯỚC MỚI: Lấy danh sách cảnh báo đang hoạt động TRƯỚC KHI kiểm tra
+        List<PlantHealthAlert> activeAlertsBeforeCheck = alertRepository
+                .findByFarmIdAndResolvedFalseOrderByDetectedAtDesc(farmId);
 
-        // Lưu các cảnh báo mới
+        // Truyền danh sách này vào hàm checkAllRules
+        List<PlantHealthAlert> newAlerts = checkAllRules(farmId, latestData, activeAlertsBeforeCheck);
+
         if (!newAlerts.isEmpty()) {
             alertRepository.saveAll(newAlerts);
             log.info("✅ Đã tạo {} cảnh báo mới", newAlerts.size());
         }
 
-        // Lấy tất cả cảnh báo chưa xử lý
-        List<PlantHealthAlert> activeAlerts = alertRepository
+        // Lấy lại danh sách đầy đủ sau khi đã thêm mới (nếu có)
+        List<PlantHealthAlert> allActiveAlerts = alertRepository
                 .findByFarmIdAndResolvedFalseOrderByDetectedAtDesc(farmId);
 
-        // Tính điểm sức khỏe
-        Integer healthScore = calculateHealthScore(activeAlerts);
-
-        // Tạo báo cáo
-        return buildHealthReport(healthScore, activeAlerts, latestData);
+        Integer healthScore = calculateHealthScore(allActiveAlerts);
+        return buildHealthReport(healthScore, allActiveAlerts, latestData);
     }
 
     /**
      * Kiểm tra tất cả 7 quy tắc
      */
-    private List<PlantHealthAlert> checkAllRules(Long farmId, SensorDataDTO data) {
+    private List<PlantHealthAlert> checkAllRules(Long farmId, SensorDataDTO data,
+            List<PlantHealthAlert> existingAlerts) {
         List<PlantHealthAlert> alerts = new ArrayList<>();
 
-        // Quy tắc 1: Nguy cơ nấm
-        checkFungusRisk(farmId, data).ifPresent(alerts::add);
+        // Lấy danh sách các loại cảnh báo đã tồn tại để kiểm tra nhanh
+        Set<AlertType> existingAlertTypes = existingAlerts.stream()
+                .map(PlantHealthAlert::getAlertType)
+                .collect(Collectors.toSet());
 
-        // Quy tắc 2: Stress nhiệt
-        checkHeatStress(farmId, data).ifPresent(alerts::add);
-
-        // Quy tắc 3: Thiếu nước
-        checkDrought(farmId, data).ifPresent(alerts::add);
-
-        // Quy tắc 4: Lạnh
-        checkColdRisk(farmId, data).ifPresent(alerts::add);
-
-        // Quy tắc 5: Độ ẩm dao động
-        checkUnstableMoisture(farmId, data).ifPresent(alerts::add);
-
-        // Quy tắc 6: Thiếu ánh sáng
-        checkLowLight(farmId, data).ifPresent(alerts::add);
-
-        // Quy tắc 7: pH bất thường
-        checkPHAbnormal(farmId, data).ifPresent(alerts::add);
+        // Sửa đổi mỗi lần gọi hàm check: chỉ thêm nếu loại cảnh báo đó chưa tồn tại
+        if (!existingAlertTypes.contains(AlertType.FUNGUS)) {
+            checkFungusRisk(farmId, data).ifPresent(alerts::add);
+        }
+        if (!existingAlertTypes.contains(AlertType.HEAT_STRESS)) {
+            checkHeatStress(farmId, data).ifPresent(alerts::add);
+        }
+        if (!existingAlertTypes.contains(AlertType.DROUGHT)) {
+            checkDrought(farmId, data).ifPresent(alerts::add);
+        }
+        if (!existingAlertTypes.contains(AlertType.COLD)) {
+            checkColdRisk(farmId, data).ifPresent(alerts::add);
+        }
+        if (!existingAlertTypes.contains(AlertType.UNSTABLE_MOISTURE)) {
+            checkUnstableMoisture(farmId, data).ifPresent(alerts::add);
+        }
+        if (!existingAlertTypes.contains(AlertType.LOW_LIGHT)) {
+            checkLowLight(farmId, data).ifPresent(alerts::add);
+        }
+        if (!existingAlertTypes.contains(AlertType.PH_ABNORMAL)) {
+            checkPHAbnormal(farmId, data).ifPresent(alerts::add);
+        }
 
         return alerts;
     }

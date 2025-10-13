@@ -89,8 +89,8 @@ public class DashboardController {
                                 .average()
                                 .orElse(0.0);
                 double avgSoilPH = latestData.values().stream()
-                                .filter(data -> data.containsKey("soil_ph"))
-                                .mapToDouble(data -> (Double) data.get("soil_ph"))
+                                .filter(data -> data.containsKey("soilPH"))
+                                .mapToDouble(data -> (Double) data.get("soilPH"))
                                 .average()
                                 .orElse(0.0);
 

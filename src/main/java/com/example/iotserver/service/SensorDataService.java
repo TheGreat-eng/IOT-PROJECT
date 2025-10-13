@@ -322,7 +322,7 @@ public class SensorDataService {
                         case "light_intensity":
                             data.setLightIntensity(((Number) value).doubleValue());
                             break;
-                        case "soil_ph":
+                        case "soilPH":
                             data.setSoilPH(((Number) value).doubleValue());
                             break;
                     }
@@ -388,7 +388,7 @@ public class SensorDataService {
                         case "light_intensity":
                             data.setLightIntensity(((Number) value).doubleValue());
                             break;
-                        case "soil_ph":
+                        case "soilPh":
                             data.setSoilPH(((Number) value).doubleValue());
                             break;
                     }

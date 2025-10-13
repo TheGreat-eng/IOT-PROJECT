@@ -38,8 +38,8 @@ public class User {
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role = Role.USER;
+    @Column(name = "role", nullable = false) // <-- SỬA LẠI TÊN CỘT (tùy chọn)
+    private UserRole role = UserRole.FARMER; // <-- THAY ĐỔI Ở ĐÂY
 
     @Column(nullable = false)
     private Boolean enabled = true;
@@ -68,8 +68,4 @@ public class User {
         updatedAt = LocalDateTime.now();
     }
 
-    public enum Role {
-        USER,
-        ADMIN
-    }
 }
