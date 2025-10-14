@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.iotserver.service.WebSocketService; // Thêm import này
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class DeviceService {
     private final DeviceRepository deviceRepository;
     private final FarmRepository farmRepository;
     private final SensorDataService sensorDataService;
+    private final WebSocketService webSocketService; // Thêm dependency này
 
     // ✅ THÊM: Inject MQTT Gateway
     private final MqttGateway mqttGateway;
@@ -186,8 +188,10 @@ public class DeviceService {
         }
     }
 
+    // SỬA LẠI HÀM NÀY
     @Transactional
     public void checkStaleDevices() {
+        // Giả sử 5 phút không có tín hiệu là offline
         LocalDateTime threshold = LocalDateTime.now().minusMinutes(5);
         List<Device> staleDevices = deviceRepository.findStaleDevices(threshold);
 
@@ -196,6 +200,9 @@ public class DeviceService {
                 device.setStatus(Device.DeviceStatus.OFFLINE);
                 deviceRepository.save(device);
                 log.warn("Device {} marked as offline due to inactivity", device.getDeviceId());
+
+                // ===> THÊM DÒNG NÀY ĐỂ GỬI WEBSOCKET <===
+                webSocketService.sendDeviceStatus(device.getFarm().getId(), device.getDeviceId(), "OFFLINE");
             }
         }
     }

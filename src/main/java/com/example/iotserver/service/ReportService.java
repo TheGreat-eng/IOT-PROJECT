@@ -36,10 +36,58 @@ public class ReportService {
 
         // Lấy dữ liệu môi trường trung bình (từ service đã có)
         Map<String, Object> avgData = new HashMap<>();
-        // Logic tính trung bình có thể được thêm vào SensorDataService
-        // hoặc tính toán ở đây dựa trên dữ liệu lấy về.
-        // Tạm thời để trống
+        try {
+            // Lấy dữ liệu mới nhất của TẤT CẢ thiết bị trong farm
+            Map<String, Map<String, Object>> latestFarmData = sensorDataService.getFarmLatestData(farmId);
+
+            // Lọc ra các giá trị khác null để tính trung bình
+            double avgTemperature = latestFarmData.values().stream()
+                    .filter(data -> data.containsKey("temperature") && data.get("temperature") != null)
+                    .mapToDouble(data -> ((Number) data.get("temperature")).doubleValue())
+                    .average()
+                    .orElse(Double.NaN); // Dùng NaN nếu không có dữ liệu
+
+            double avgHumidity = latestFarmData.values().stream()
+                    .filter(data -> data.containsKey("humidity") && data.get("humidity") != null)
+                    .mapToDouble(data -> ((Number) data.get("humidity")).doubleValue())
+                    .average()
+                    .orElse(Double.NaN);
+
+            double avgLightIntensity = latestFarmData.values().stream()
+                    .filter(data -> data.containsKey("light_intensity") && data.get("light_intensity") != null)
+                    .mapToDouble(data -> ((Number) data.get("light_intensity")).doubleValue())
+                    .average()
+                    .orElse(Double.NaN);
+            double avgSoilMoisture = latestFarmData.values().stream()
+                    .filter(data -> data.containsKey("soil_moisture") && data.get("soil_moisture") != null)
+                    .mapToDouble(data -> ((Number) data.get("soil_moisture")).doubleValue())
+                    .average()
+                    .orElse(Double.NaN);
+            double avgSoilPH = latestFarmData.values().stream()
+                    .filter(data -> data.containsKey("soilPH") && data.get("soilPH") != null)
+                    .mapToDouble(data -> ((Number) data.get("soilPH")).doubleValue())
+                    .average()
+                    .orElse(Double.NaN);
+
+            // Đưa giá trị vào map avgData (chỉ đưa vào nếu nó là số)
+            if (!Double.isNaN(avgTemperature))
+                avgData.put("avgTemperature", Math.round(avgTemperature * 10) / 10.0);
+            if (!Double.isNaN(avgHumidity))
+                avgData.put("avgHumidity", Math.round(avgHumidity * 10) / 10.0);
+            if (!Double.isNaN(avgLightIntensity))
+                avgData.put("avgLightIntensity", Math.round(avgLightIntensity));
+            if (!Double.isNaN(avgSoilMoisture))
+                avgData.put("avgSoilMoisture", Math.round(avgSoilMoisture * 10) / 10.0);
+            if (!Double.isNaN(avgSoilPH))
+                avgData.put("avgSoilPH", Math.round(avgSoilPH * 100) / 100.0); // pH lấy 2 chữ số thập phân
+
+        } catch (Exception e) {
+            // Ghi log lỗi nhưng không làm crash ứng dụng
+            // logger.error("Không thể tính dữ liệu môi trường trung bình", e);
+        }
+
         summary.put("averageEnvironment", avgData);
+        // ===================================
 
         return summary;
     }

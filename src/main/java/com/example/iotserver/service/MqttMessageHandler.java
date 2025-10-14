@@ -63,6 +63,9 @@ public class MqttMessageHandler {
                 deviceRepository.save(device);
 
                 sensorData.setFarmId(device.getFarm().getId());
+
+                // GỬI DỮ LIỆU QUA WEBSOCKET
+                webSocketService.sendSensorData(device.getFarm().getId(), sensorData);
             });
 
             // Save to InfluxDB

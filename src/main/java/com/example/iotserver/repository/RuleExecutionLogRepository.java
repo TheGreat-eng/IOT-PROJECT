@@ -5,6 +5,7 @@ import com.example.iotserver.entity.RuleExecutionLog.ExecutionStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -33,4 +34,9 @@ public interface RuleExecutionLogRepository extends JpaRepository<RuleExecutionL
     // Xóa log cũ (tự động dọn dẹp)
     @Query("DELETE FROM RuleExecutionLog l WHERE l.executedAt < :threshold")
     void deleteOldLogs(LocalDateTime threshold);
+
+    // ====> THÊM METHOD MỚI NÀY <====
+    @Modifying // Bắt buộc phải có khi thực hiện query Cập nhật hoặc Xóa
+    @Query("DELETE FROM RuleExecutionLog l WHERE l.rule.id = :ruleId")
+    void deleteByRuleId(Long ruleId);
 }

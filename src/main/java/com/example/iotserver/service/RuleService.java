@@ -144,13 +144,28 @@ public class RuleService {
     /**
      * Xóa quy tắc
      */
-    @Transactional
+    @Transactional // Đảm bảo toàn bộ thao tác là một transaction
     public void deleteRule(Long ruleId) {
         Rule rule = ruleRepository.findById(ruleId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy quy tắc"));
 
+        // ====> THÊM LOGIC XÓA CÁC BẢN GHI CON TRƯỚC <====
+
+        // 1. Tìm tất cả các log thuộc về quy tắc này
+        // (Cách này không hiệu quả nếu có nhiều log, xem cách tối ưu hơn bên dưới)
+        // List<RuleExecutionLog> logsToDelete = logRepository.findByRuleId(ruleId,
+        // Pageable.unpaged()).getContent();
+        // logRepository.deleteAll(logsToDelete);
+
+        // CÁCH TỐI ƯU HƠN: Dùng query xóa trực tiếp (cần tạo method trong Repository)
+        logRepository.deleteByRuleId(ruleId);
+
+        // ================================================
+
+        // 2. Sau khi đã xóa hết các bản ghi con, bây giờ mới xóa bản ghi cha
         ruleRepository.delete(rule);
-        log.info("Đã xóa quy tắc: {}", rule.getName());
+
+        log.info("Đã xóa quy tắc: {} và các log liên quan", rule.getName());
     }
 
     /**

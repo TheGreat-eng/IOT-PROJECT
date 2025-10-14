@@ -2,9 +2,14 @@ package com.example.iotserver.service;
 
 import com.example.iotserver.dto.FarmDTO;
 import com.example.iotserver.entity.Farm;
+import com.example.iotserver.entity.Rule;
 import com.example.iotserver.entity.User;
+import com.example.iotserver.repository.DeviceRepository;
 import com.example.iotserver.repository.FarmRepository;
+import com.example.iotserver.repository.RuleRepository;
 import com.example.iotserver.repository.UserRepository;
+import com.example.iotserver.repository.WeatherRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +25,10 @@ public class FarmService {
 
     private final FarmRepository farmRepository;
     private final UserRepository userRepository;
+    private final WeatherRepository weatherRepository;
+    private final RuleRepository ruleRepository;
+    private final DeviceRepository deviceRepository;
+    private final RuleService ruleService; // Dùng lại logic xóa Rule phức tạp
 
     @Transactional
     public FarmDTO createFarm(Long userId, FarmDTO dto) {
@@ -64,8 +73,24 @@ public class FarmService {
         Farm farm = farmRepository.findByIdAndOwnerId(farmId, userId)
                 .orElseThrow(() -> new RuntimeException("Farm not found or access denied"));
 
+        // ====> THÊM LOGIC XÓA CÁC BẢN GHI CON <====
+
+        // 1. Xóa dữ liệu thời tiết
+        weatherRepository.deleteByFarmId(farmId); // Cần thêm method này vào WeatherRepository
+
+        // 2. Xóa tất cả các quy tắc thuộc farm
+        List<Rule> rulesToDelete = ruleRepository.findByFarmId(farmId);
+        for (Rule rule : rulesToDelete) {
+            ruleService.deleteRule(rule.getId()); // Tái sử dụng logic xóa rule đã có (xóa cả log)
+        }
+
+        // 3. Xóa tất cả các thiết bị thuộc farm
+        deviceRepository.deleteByFarmId(farmId); // Cần thêm method này vào DeviceRepository
+
+        // 4. Cuối cùng, xóa nông trại
         farmRepository.delete(farm);
-        log.info("Deleted farm: {}", farmId);
+
+        log.info("Đã xóa nông trại {} và tất cả dữ liệu liên quan", farmId);
     }
 
     public FarmDTO getFarm(Long farmId, Long userId) {
