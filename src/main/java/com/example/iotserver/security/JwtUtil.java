@@ -22,62 +22,85 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    // Tạo token từ email
+    /**
+     * Tạo JWT token từ email
+     */
     public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, email);
     }
 
-    // Tạo token với claims
+    /**
+     * Tạo token với claims và subject
+     */
     private String createToken(Map<String, Object> claims, String subject) {
+        long nowMillis = System.currentTimeMillis();
+        Date now = new Date(nowMillis);
+        Date expiryDate = new Date(nowMillis + expiration);
+
         return Jwts.builder()
-                .claims(claims)
-                .subject(subject)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey())
+                .claims(claims) // ✅ Không có "set"
+                .subject(subject) // ✅ Không có "set"
+                .issuedAt(now) // ✅ Không có "set"
+                .expiration(expiryDate) // ✅ Không có "set"
+                .signWith(getSigningKey(), Jwts.SIG.HS256) // ✅ Dùng Jwts.SIG
                 .compact();
     }
 
-    // Lấy signing key
+    /**
+     * Lấy signing key từ secret (Base64 decoded)
+     */
     private SecretKey getSigningKey() {
+        // ✅ DECODE Base64 để đảm bảo đủ 256 bits
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Trích xuất email từ token
+    /**
+     * Trích xuất email từ token
+     */
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // Trích xuất expiration date
+    /**
+     * Trích xuất expiration date từ token
+     */
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    // Trích xuất claim
+    /**
+     * Trích xuất claim từ token
+     */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    // Trích xuất tất cả claims
+    /**
+     * Trích xuất tất cả claims từ token
+     */
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getSigningKey())
+        return Jwts.parser() // ✅ Dùng parser() thay vì parserBuilder()
+                .verifyWith(getSigningKey()) // ✅ Dùng verifyWith()
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .parseSignedClaims(token) // ✅ Dùng parseSignedClaims()
+                .getPayload(); // ✅ Dùng getPayload()
     }
 
-    // Kiểm tra token hết hạn chưa
+    /**
+     * Kiểm tra token có hết hạn không
+     */
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    // Validate token
+    /**
+     * Xác thực token
+     */
     public Boolean validateToken(String token, String email) {
-        final String tokenEmail = extractEmail(token);
-        return (tokenEmail.equals(email) && !isTokenExpired(token));
+        final String extractedEmail = extractEmail(token);
+        return (extractedEmail.equals(email) && !isTokenExpired(token));
     }
 }
