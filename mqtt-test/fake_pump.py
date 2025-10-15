@@ -14,31 +14,26 @@ DEVICE_ID = "DEV-PUMP-001"
 
 pump_state = "OFF"
 
+# ✅ Callback kiểu cũ (API Version 1)
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        print(f"\n{'='*60}")
-        print(f"✅ [{DEVICE_ID}] Đã kết nối MQTT Broker")
-        print(f"{'='*60}")
-        
-        # Subscribe để nhận lệnh điều khiển
+        print("✅ Kết nối thành công")
         client.subscribe(f"device/{DEVICE_ID}/control")
         print(f"📡 Đang lắng nghe topic: device/{DEVICE_ID}/control")
         
-        # Gửi status ONLINE
-        status_msg = {
+        feedback = {
             "deviceId": DEVICE_ID,
             "status": "ONLINE",
             "state": pump_state,
             "timestamp": datetime.now().isoformat()
         }
-        client.publish(f"device/{DEVICE_ID}/status", json.dumps(status_msg))
+        client.publish(f"device/{DEVICE_ID}/status", json.dumps(feedback))
         print(f"✅ Đã gửi status: ONLINE, state: {pump_state}\n")
     else:
-        print(f"❌ Lỗi kết nối MQTT: {rc}")
+        print(f"❌ Kết nối thất bại: {rc}")
 
-def on_message(client, userdata, msg):
+def on_message(client, userdata, msg):  # ✅ Không có 'properties'
     global pump_state
-    
     print(f"\n{'='*60}")
     print(f"📥 NHẬN LỆNH TỪ BACKEND")
     print(f"{'='*60}")
@@ -57,7 +52,6 @@ def on_message(client, userdata, msg):
             print(f"\n💧 BẬT MÁY BƠM")
             print(f"⏱️  Thời gian: {duration} giây")
             
-            # Gửi feedback về backend
             feedback = {
                 "deviceId": DEVICE_ID,
                 "status": "ONLINE",
@@ -72,7 +66,6 @@ def on_message(client, userdata, msg):
             pump_state = "OFF"
             print(f"\n🛑 TẮT MÁY BƠM")
             
-            # Gửi feedback về backend
             feedback = {
                 "deviceId": DEVICE_ID,
                 "status": "ONLINE",
@@ -87,8 +80,8 @@ def on_message(client, userdata, msg):
     except Exception as e:
         print(f"❌ Lỗi xử lý message: {e}\n")
 
-# Setup MQTT client
-client = mqtt.Client()
+# ✅ Sử dụng API Version 1
+client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION1)
 client.on_connect = on_connect
 client.on_message = on_message
 
