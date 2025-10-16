@@ -40,4 +40,7 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
     @Modifying
     @Transactional
     void deleteByFarmId(Long farmId);
+
+    // THÊM PHƯƠNG THỨC NÀY
+    long countByStatus(DeviceStatus status);
 }
