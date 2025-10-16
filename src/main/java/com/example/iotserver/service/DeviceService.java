@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.springframework.cache.annotation.Cacheable; // <-- THÊM IMPORT
+import org.springframework.cache.annotation.CacheEvict; // <-- THÊM IMPORT
 
 @Service
 @Slf4j
@@ -61,6 +63,7 @@ public class DeviceService {
     }
 
     @Transactional
+    @CacheEvict(value = "devices", key = "#deviceId") // <-- THÊM ANNOTATION NÀY
     public DeviceDTO updateDevice(Long deviceId, DeviceDTO dto) {
         Device device = deviceRepository.findById(deviceId)
                 .orElseThrow(() -> new RuntimeException("Device not found"));
@@ -82,6 +85,7 @@ public class DeviceService {
     }
 
     @Transactional
+    @CacheEvict(value = "devices", key = "#id") // <-- THÊM ANNOTATION NÀY (đổi key thành #id)
     public void deleteDevice(Long deviceId) {
         Device device = deviceRepository.findById(deviceId)
                 .orElseThrow(() -> new RuntimeException("Device not found"));
@@ -90,7 +94,9 @@ public class DeviceService {
         log.info("Deleted device: {}", device.getDeviceId());
     }
 
+    @Cacheable(value = "devices", key = "#deviceId") // <-- THÊM ANNOTATION NÀY
     public DeviceDTO getDevice(Long deviceId) {
+        log.info("DATABASE HIT: Lấy thông tin device với ID: {}", deviceId); // Thêm log để kiểm tra
         Device device = deviceRepository.findById(deviceId)
                 .orElseThrow(() -> new RuntimeException("Device not found"));
         return mapToDetailedDTO(device);

@@ -11,13 +11,16 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.Serializable; // <-- THÊM IMPORT NÀY
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SensorDataDTO {
+public class SensorDataDTO implements Serializable { // <-- THÊM "implements Serializable" VÀO ĐÂY
+
+    private static final long serialVersionUID = 1L;
 
     private String deviceId;
     private String deviceName;

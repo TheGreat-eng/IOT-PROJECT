@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.cache.annotation.Cacheable; // <-- THÊM IMPORT
+import org.springframework.cache.annotation.CacheEvict; // <-- THÊM IMPORT
 
 @Service
 @Slf4j
@@ -49,6 +51,7 @@ public class FarmService {
     }
 
     @Transactional
+    @CacheEvict(value = "farms", key = "#farmId") // <-- THÊM ANNOTATION NÀY
     public FarmDTO updateFarm(Long farmId, Long userId, FarmDTO dto) {
         Farm farm = farmRepository.findByIdAndOwnerId(farmId, userId)
                 .orElseThrow(() -> new RuntimeException("Farm not found or access denied"));
@@ -69,6 +72,7 @@ public class FarmService {
     }
 
     @Transactional
+    @CacheEvict(value = "farms", key = "#farmId") // <-- THÊM ANNOTATION NÀY
     public void deleteFarm(Long farmId, Long userId) {
         Farm farm = farmRepository.findByIdAndOwnerId(farmId, userId)
                 .orElseThrow(() -> new RuntimeException("Farm not found or access denied"));
@@ -93,7 +97,9 @@ public class FarmService {
         log.info("Đã xóa nông trại {} và tất cả dữ liệu liên quan", farmId);
     }
 
+    @Cacheable(value = "farms", key = "#farmId") // <-- THÊM ANNOTATION NÀY
     public FarmDTO getFarm(Long farmId, Long userId) {
+        log.info("DATABASE HIT: Lấy thông tin farm với ID: {}", farmId); // Thêm log để kiểm tra
         Farm farm = farmRepository.findById(farmId)
                 .orElseThrow(() -> new RuntimeException("Farm not found"));
 
