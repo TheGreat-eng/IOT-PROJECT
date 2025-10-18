@@ -6,6 +6,7 @@ import com.example.iotserver.entity.Device.DeviceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,13 @@ import java.util.Optional;
 public interface DeviceRepository extends JpaRepository<Device, Long> {
 
     Optional<Device> findByDeviceId(String deviceId);
+
+    // ✅ THÊM METHOD NÀY
+    @Query("SELECT d FROM Device d " +
+            "LEFT JOIN FETCH d.farm f " +
+            "LEFT JOIN FETCH f.owner " +
+            "WHERE d.deviceId = :deviceId")
+    Optional<Device> findByDeviceIdWithFarmAndOwner(@Param("deviceId") String deviceId);
 
     List<Device> findByFarmId(Long farmId);
 

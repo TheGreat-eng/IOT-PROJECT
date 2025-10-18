@@ -9,13 +9,17 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/devices")
 @RequiredArgsConstructor
@@ -176,8 +180,24 @@ public class DeviceController {
             @Parameter(description = "Trường dữ liệu (temperature, humidity,...)") @RequestParam String field,
             @Parameter(description = "Hàm tổng hợp (mean, max, min)") @RequestParam(defaultValue = "mean") String aggregation,
             @Parameter(description = "Cửa sổ thời gian (1h, 1d,...)") @RequestParam(defaultValue = "1h") String window) {
-        List<SensorDataDTO> data = sensorDataService.getAggregatedData(
-                deviceId, field, aggregation, window);
-        return ResponseEntity.ok(ApiResponse.success(data));
+
+        try {
+            List<SensorDataDTO> data = sensorDataService.getAggregatedData(
+                    deviceId, field, aggregation, window);
+
+            // ✅ THÊM: Kiểm tra dữ liệu rỗng
+            if (data.isEmpty()) {
+                return ResponseEntity.ok(ApiResponse.success(
+                        "Không có dữ liệu trong 7 ngày qua",
+                        Collections.emptyList()));
+            }
+
+            return ResponseEntity.ok(ApiResponse.success(data));
+
+        } catch (Exception e) {
+            log.error("❌ Lỗi khi lấy aggregated data: {}", e.getMessage(), e);
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.error("Không thể lấy dữ liệu: " + e.getMessage()));
+        }
     }
 }

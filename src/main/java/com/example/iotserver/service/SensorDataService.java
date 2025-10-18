@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -201,12 +202,33 @@ public class SensorDataService {
                 aggregation);
 
         List<Map<String, Object>> rawDataList = executeQueryList(flux);
+
+        // ✅ THÊM: Log debug
+        log.info("🔍 [Aggregated Query] Device: {}, Field: {}, Window: {}, Results: {}",
+                deviceId, field, window, rawDataList.size());
+
+        if (rawDataList.isEmpty()) {
+            log.warn("⚠️ Không có dữ liệu aggregated cho device: {}, field: {}", deviceId, field);
+            return Collections.emptyList(); // ✅ Trả về list rỗng thay vì lỗi
+        }
+
         return rawDataList.stream()
                 .map(data -> {
                     SensorDataDTO dto = SensorDataDTO.fromInfluxRecord(data);
-                    dto.setAvgValue((Double) data.get("_value"));
+
+                    // ✅ SỬA: Xử lý null
+                    Object valueObj = data.get("_value");
+                    if (valueObj != null) {
+                        if (valueObj instanceof Number) {
+                            dto.setAvgValue(((Number) valueObj).doubleValue());
+                        } else {
+                            log.warn("⚠️ Value không phải số: {}", valueObj);
+                        }
+                    }
+
                     return dto;
                 })
+                .filter(dto -> dto.getAvgValue() != null) // ✅ Lọc bỏ các record null
                 .collect(Collectors.toList());
     }
 
@@ -253,17 +275,45 @@ public class SensorDataService {
     }
 
     private List<Map<String, Object>> executeQueryList(String flux) {
-        QueryApi queryApi = influxDBClient.getQueryApi();
-        List<FluxTable> tables = queryApi.query(flux, influxDBConfig.getOrg());
+        try {
+            QueryApi queryApi = influxDBClient.getQueryApi();
+            List<FluxTable> tables = queryApi.query(flux, influxDBConfig.getOrg());
 
-        List<Map<String, Object>> results = new ArrayList<>();
-        for (FluxTable table : tables) {
-            for (FluxRecord record : table.getRecords()) {
-                results.add(fluxRecordToMap(record));
+            // ✅ THÊM: Log debug
+            log.debug("🔍 [InfluxDB] Query executed, tables count: {}", tables.size());
+
+            if (tables.isEmpty()) {
+                return Collections.emptyList(); // ✅ Trả về list rỗng
             }
-        }
 
-        return results;
+            List<Map<String, Object>> results = new ArrayList<>();
+            for (FluxTable table : tables) {
+                for (FluxRecord record : table.getRecords()) {
+                    Map<String, Object> data = new HashMap<>();
+
+                    // ✅ SỬA: Xử lý null an toàn
+                    Object value = record.getValue();
+                    if (value != null) {
+                        data.put("_value", value);
+                    } else {
+                        log.warn("⚠️ Record có value null, bỏ qua");
+                        continue; // Skip record này
+                    }
+
+                    data.put("_time", record.getTime());
+                    data.put("_field", record.getField());
+                    data.put("device_id", record.getValueByKey("device_id"));
+
+                    results.add(data);
+                }
+            }
+
+            return results;
+
+        } catch (Exception e) {
+            log.error("❌ [InfluxDB] Lỗi query: {}", e.getMessage(), e);
+            return Collections.emptyList(); // ✅ Trả về list rỗng thay vì throw exception
+        }
     }
 
     private Map<String, Object> fluxRecordToMap(FluxRecord record) {

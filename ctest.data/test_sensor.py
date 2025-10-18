@@ -17,14 +17,22 @@ def connect_mqtt():
     print(f"Connected to MQTT Broker at {BROKER}:{PORT}")
 
 def publish_data():
+    # payload = {
+    #     "deviceId": DEVICE_ID,
+    #     "sensorType": "SOIL_MOISTURE",
+    #     "lightIntensity": 310,  # ✅ THÊM lightIntensity
+    #     "soilMoisture": 25.0,
+    #     "temperature": 28.5,
+    #     "humidity": 67.0,
+    #     "soilPH": 5,  # ✅ THÊM soilPH BẤT THƯỜNG
+    #     "timestamp": datetime.now().isoformat()
+    # }
     payload = {
         "deviceId": DEVICE_ID,
         "sensorType": "SOIL_MOISTURE",
-        "lightIntensity": 310,  # ✅ THÊM lightIntensity
-        "soilMoisture": 25.0,
+        "soilMoisture": 19.5, # Giá trị để kích hoạt rule
         "temperature": 28.5,
         "humidity": 67.0,
-        "soilPH": 5,  # ✅ THÊM soilPH BẤT THƯỜNG
         "timestamp": datetime.now().isoformat()
     }
     payload_json = json.dumps(payload)

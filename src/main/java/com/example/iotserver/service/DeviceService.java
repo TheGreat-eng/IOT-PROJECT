@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.cache.annotation.Cacheable; // <-- THÊM IMPORT
 import org.springframework.cache.annotation.CacheEvict; // <-- THÊM IMPORT
+import java.time.temporal.ChronoUnit; // <<<< 1. THÊM IMPORT
 
 @Service
 @Slf4j
@@ -32,6 +33,7 @@ public class DeviceService {
     private final FarmRepository farmRepository;
     private final SensorDataService sensorDataService;
     private final WebSocketService webSocketService; // Thêm dependency này
+    private final EmailService emailService; // <<<< 2. INJECT EMAILSERVICE
 
     // ✅ THÊM: Inject MQTT Gateway
     private final MqttGateway mqttGateway;
@@ -51,7 +53,10 @@ public class DeviceService {
         device.setDeviceId(deviceId);
         device.setName(dto.getName());
         device.setDescription(dto.getDescription());
-        device.setType(Device.DeviceType.valueOf(dto.getType()));
+
+        // ✅ SỬA: Dùng helper method để map type
+        device.setType(parseDeviceType(dto.getType()));
+
         device.setStatus(Device.DeviceStatus.OFFLINE);
         device.setFarm(farm);
         device.setMetadata(dto.getMetadata());
@@ -85,7 +90,7 @@ public class DeviceService {
     }
 
     @Transactional
-    @CacheEvict(value = "devices", key = "#id") // <-- THÊM ANNOTATION NÀY (đổi key thành #id)
+    @CacheEvict(value = "devices", key = "#deviceId") // ✅ SỬA: Đổi thành #deviceId
     public void deleteDevice(Long deviceId) {
         Device device = deviceRepository.findById(deviceId)
                 .orElseThrow(() -> new RuntimeException("Device not found"));
@@ -210,6 +215,8 @@ public class DeviceService {
                 // ===> THÊM DÒNG NÀY ĐỂ GỬI WEBSOCKET <===
                 webSocketService.sendDeviceStatus(device.getFarm().getId(), device.getDeviceId(), "OFFLINE");
             }
+            // <<<< 3. GỌI HÀM GỬI EMAIL >>>>
+            sendOfflineNotificationIfNeeded(device);
         }
     }
 
@@ -287,5 +294,71 @@ public class DeviceService {
         }
 
         return dto;
+    }
+
+    // <<<< 4. THÊM HÀM MỚI NÀY VÀO CUỐI FILE >>>>
+    /**
+     * Gửi email thông báo nếu thiết bị offline quá lâu và chưa được thông báo gần
+     * đây.
+     */
+    private void sendOfflineNotificationIfNeeded(Device device) {
+        if (device.getStatus() != Device.DeviceStatus.OFFLINE)
+            return;
+
+        long minutesOffline = ChronoUnit.MINUTES.between(device.getLastSeen(), LocalDateTime.now());
+        if (minutesOffline < 60)
+            return; // Phải offline ít nhất 1 giờ
+
+        if (device.getLastOfflineNotificationAt() != null &&
+                ChronoUnit.HOURS.between(device.getLastOfflineNotificationAt(), LocalDateTime.now()) < 6) {
+            return; // Chỉ gửi lại sau mỗi 6 giờ
+        }
+
+        Farm farm = device.getFarm();
+        String ownerEmail = farm.getOwner().getEmail();
+
+        if (ownerEmail != null && !ownerEmail.isEmpty()) {
+            String subject = String.format("[SmartFarm Cảnh Báo] Thiết bị '%s' đã offline", device.getName());
+            String text = String.format(
+                    "Xin chào,\n\n" +
+                            "Thiết bị '%s' (ID: %s) tại nông trại '%s' đã mất kết nối hơn %d phút.\n\n" +
+                            "Lần cuối nhận tín hiệu: %s\n\n" +
+                            "Vui lòng kiểm tra nguồn điện và kết nối mạng của thiết bị.\n\n" +
+                            "Trân trọng,\n" + "Đội ngũ SmartFarm.",
+                    device.getName(), device.getDeviceId(), farm.getName(),
+                    minutesOffline, device.getLastSeen().toString());
+
+            emailService.sendSimpleMessage(ownerEmail, subject, text);
+            log.info("Đã gửi email cảnh báo offline cho thiết bị {} tới {}", device.getDeviceId(), ownerEmail);
+
+            device.setLastOfflineNotificationAt(LocalDateTime.now());
+            deviceRepository.save(device);
+        }
+    }
+
+    // ✅ THÊM: Helper method để map type linh hoạt
+    private Device.DeviceType parseDeviceType(String typeStr) {
+        // Map các tên ngắn gọn sang tên đầy đủ
+        Map<String, Device.DeviceType> typeMapping = Map.of(
+                "DHT22", Device.DeviceType.SENSOR_DHT22,
+                "SOIL_MOISTURE", Device.DeviceType.SENSOR_SOIL_MOISTURE,
+                "LIGHT", Device.DeviceType.SENSOR_LIGHT,
+                "PH", Device.DeviceType.SENSOR_PH,
+                "PUMP", Device.DeviceType.ACTUATOR_PUMP,
+                "FAN", Device.DeviceType.ACTUATOR_FAN,
+                "LIGHT_ACTUATOR", Device.DeviceType.ACTUATOR_LIGHT);
+
+        // Thử tìm trong map trước
+        if (typeMapping.containsKey(typeStr)) {
+            return typeMapping.get(typeStr);
+        }
+
+        // Nếu không có trong map, parse trực tiếp từ enum
+        try {
+            return Device.DeviceType.valueOf(typeStr);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid device type: " + typeStr +
+                    ". Valid types: " + String.join(", ", Device.DeviceType.values().toString()));
+        }
     }
 }

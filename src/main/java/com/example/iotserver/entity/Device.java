@@ -53,6 +53,9 @@ public class Device {
     @Column(name = "last_seen")
     private LocalDateTime lastSeen;
 
+    @Column(name = "last_offline_notification_at") // <<<< THÊM TRƯỜNG MỚI NÀY
+    private LocalDateTime lastOfflineNotificationAt;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 

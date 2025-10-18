@@ -50,6 +50,25 @@ public class Farm {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    // <<<< THÊM CÁC TRƯỜNG MỚI DƯỚI ĐÂY >>>>
+    @Column(name = "last_high_temp_warning_at")
+    private LocalDateTime lastHighTempSensorWarningAt;
+
+    @Column(name = "last_low_soil_warning_at")
+    private LocalDateTime lastLowSoilMoistureWarningAt;
+
+    @Column(name = "last_high_humidity_warning_at")
+    private LocalDateTime lastHighHumidityWarningAt;
+
+    @Column(name = "last_low_light_warning_at")
+    private LocalDateTime lastLowLightWarningAt;
+
+    @Column(name = "last_high_ph_warning_at")
+    private LocalDateTime lastHighPhWarningAt;
+
+    @Column(name = "last_activity_at")
+    private LocalDateTime lastActivityAt;
+
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();

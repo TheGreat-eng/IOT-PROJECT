@@ -19,6 +19,8 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.example.iotserver.service.EmailService; // <<<< 1. THÊM IMPORT
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -365,8 +367,8 @@ public class RuleEngineService {
                 return turnOffDevice(action);
             case SEND_NOTIFICATION:
                 return sendNotification(rule, action);
-            case SEND_EMAIL:
-                return sendEmail(rule, action);
+            case SEND_EMAIL: // <<<< 3. THÊM CASE MỚI
+                return sendEmailForRule(rule, action);
             default:
                 return "Loại hành động không được hỗ trợ: " + action.getType();
         }
@@ -419,28 +421,24 @@ public class RuleEngineService {
     /**
      * Gửi email
      */
-    private String sendEmail(Rule rule, Rule.RuleAction action) {
-        // Lấy email của chủ nông trại
+    private String sendEmailForRule(Rule rule, Rule.RuleAction action) {
         String ownerEmail = rule.getFarm().getOwner().getEmail();
         if (ownerEmail == null || ownerEmail.isEmpty()) {
             return "Lỗi: Không tìm thấy email của chủ nông trại.";
         }
 
-        // Tạo nội dung email
-        String subject = "[SmartFarm] Cảnh báo từ quy tắc: " + rule.getName();
+        String subject = "[SmartFarm] Quy tắc tự động đã kích hoạt: " + rule.getName();
         String text = "Xin chào,\n\n"
-                + "Hệ thống SmartFarm vừa kích hoạt một quy tắc tự động.\n\n"
+                + "Quy tắc tự động của bạn đã được kích hoạt tại nông trại '" + rule.getFarm().getName() + "'.\n\n"
                 + "Tên quy tắc: " + rule.getName() + "\n"
-                + "Nông trại: " + rule.getFarm().getName() + "\n"
                 + "Thông điệp: " + action.getMessage() + "\n\n"
-                + "Vui lòng kiểm tra hệ thống.\n\n"
+                + "Hệ thống đã thực hiện hành động tương ứng.\n\n"
                 + "Trân trọng,\n"
                 + "Đội ngũ SmartFarm.";
 
-        // Gọi service để gửi
         emailService.sendSimpleMessage(ownerEmail, subject, text);
 
-        return "Đã gửi email cảnh báo tới: " + ownerEmail;
+        return "Đã gửi email cảnh báo (từ quy tắc) tới: " + ownerEmail;
     }
 
     /**
