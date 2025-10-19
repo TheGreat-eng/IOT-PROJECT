@@ -117,8 +117,8 @@ services:
       MQTT_PASSWORD: ""
       
       # Redis Configuration
-      SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
       
       # JWT Configuration
       JWT_SECRET: SmartFarmSecretKey2024VeryLongAndSecureKeyForJWTTokenGenerationAtLeast256Bits

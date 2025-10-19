@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResponse {
-    private String token;
+    private String accessToken; // ✅ Đổi tên từ "token"
+    private String refreshToken; // ✅ THÊM MỚI
+    private String tokenType; // ✅ THÊM MỚI
     private Long userId;
     private String email;
     private String fullName;

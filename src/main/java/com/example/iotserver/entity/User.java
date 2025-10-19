@@ -44,6 +44,13 @@ public class User {
     @Column(nullable = false)
     private Boolean enabled = true;
 
+    // ✅ THÊM CÁC TRƯỜNG MỚI CHO REFRESH TOKEN
+    @Column(name = "refresh_token", unique = true, length = 500)
+    private String refreshToken;
+
+    @Column(name = "refresh_token_expiry")
+    private LocalDateTime refreshTokenExpiry;
+
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     @JsonManagedReference // ✅ Parent side
     private List<Farm> farms = new ArrayList<>();

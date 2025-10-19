@@ -14,12 +14,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,34 +70,107 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Đăng nhập vào hệ thống", description = "Xác thực người dùng và trả về JWT token.") // <-- THÊM
-    @ApiResponses(value = { // <-- THÊM
-            @ApiResponse(responseCode = "200", description = "Đăng nhập thành công", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Sai email hoặc mật khẩu", content = @Content)
+    @Operation(summary = "Đăng nhập vào hệ thống")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Đăng nhập thành công"),
+            @ApiResponse(responseCode = "400", description = "Sai email hoặc mật khẩu")
     })
     @PostMapping("/login")
+    @Transactional
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
-        // Tìm user theo email
         User user = userService.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Email hoặc mật khẩu không đúng"));
 
-        // Kiểm tra password
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Email hoặc mật khẩu không đúng");
         }
 
-        // Tạo JWT token
-        String token = jwtUtil.generateToken(user.getEmail());
+        // ✅ Tạo access token và refresh token
+        String accessToken = jwtUtil.generateToken(user.getEmail());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
 
-        // Tạo response
+        // ✅ Lưu refresh token vào database
+        user.setRefreshToken(refreshToken);
+        user.setRefreshTokenExpiry(LocalDateTime.now().plusDays(7));
+        userService.save(user);
+
         AuthResponse response = AuthResponse.builder()
-                .token(token)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .tokenType("Bearer")
                 .userId(user.getId())
                 .email(user.getEmail())
                 .fullName(user.getFullName())
-                .role(user.getRole()) // <-- THAY ĐỔI Ở ĐÂY, đơn giản hơn nhiều
+                .role(user.getRole())
                 .build();
 
+        return ResponseEntity.ok(response);
+    }
+
+    // ✅ THÊM API MỚI: Làm mới access token
+    @Operation(summary = "Làm mới access token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Làm mới token thành công"),
+            @ApiResponse(responseCode = "403", description = "Refresh token không hợp lệ")
+    })
+    @PostMapping("/refresh")
+    @Transactional
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+
+        if (refreshToken == null || refreshToken.isEmpty()) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Refresh token không được để trống");
+            return ResponseEntity.badRequest().body(error);
+        }
+
+        // Tìm user theo refresh token
+        User user = userService.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new RuntimeException("Refresh token không hợp lệ"));
+
+        // Kiểm tra refresh token có hết hạn không
+        if (jwtUtil.isRefreshTokenExpired(user.getRefreshTokenExpiry())) {
+            // Xóa refresh token đã hết hạn
+            user.setRefreshToken(null);
+            user.setRefreshTokenExpiry(null);
+            userService.save(user);
+
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Refresh token đã hết hạn. Vui lòng đăng nhập lại");
+            return ResponseEntity.status(403).body(error);
+        }
+
+        // Tạo access token mới
+        String newAccessToken = jwtUtil.generateToken(user.getEmail());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("accessToken", newAccessToken);
+        response.put("refreshToken", refreshToken);
+        response.put("tokenType", "Bearer");
+
+        return ResponseEntity.ok(response);
+    }
+
+    // ✅ THÊM API MỚI: Đăng xuất
+    @Operation(summary = "Đăng xuất")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Đăng xuất thành công")
+    })
+    @PostMapping("/logout")
+    @Transactional
+    public ResponseEntity<?> logout(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+
+        if (refreshToken != null && !refreshToken.isEmpty()) {
+            userService.findByRefreshToken(refreshToken).ifPresent(user -> {
+                user.setRefreshToken(null);
+                user.setRefreshTokenExpiry(null);
+                userService.save(user);
+            });
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Đăng xuất thành công");
         return ResponseEntity.ok(response);
     }
 

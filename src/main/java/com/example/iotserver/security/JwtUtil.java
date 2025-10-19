@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,29 +23,47 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
+    // ✅ THÊM TRƯỜNG MỚI
+    @Value("${jwt.refresh.expiration:604800000}") // 7 ngày mặc định
+    private Long refreshExpiration;
+
     /**
      * Tạo JWT token từ email
      */
     public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, email);
+        return createToken(claims, email, expiration);
+    }
+
+    // ✅ THÊM: Tạo Refresh Token
+    public String generateRefreshToken(String email) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("type", "refresh");
+        return createToken(claims, email, refreshExpiration);
     }
 
     /**
      * Tạo token với claims và subject
      */
-    private String createToken(Map<String, Object> claims, String subject) {
+    private String createToken(Map<String, Object> claims, String subject, Long expirationTime) {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
-        Date expiryDate = new Date(nowMillis + expiration);
+        Date expiryDate = new Date(nowMillis + expirationTime);
 
         return Jwts.builder()
-                .claims(claims) // ✅ Không có "set"
-                .subject(subject) // ✅ Không có "set"
-                .issuedAt(now) // ✅ Không có "set"
-                .expiration(expiryDate) // ✅ Không có "set"
-                .signWith(getSigningKey(), Jwts.SIG.HS256) // ✅ Dùng Jwts.SIG
+                .claims(claims)
+                .subject(subject)
+                .issuedAt(now)
+                .expiration(expiryDate)
+                .signWith(getSigningKey(), Jwts.SIG.HS256)
                 .compact();
+    }
+
+    // ✅ THÊM: Kiểm tra refresh token expiry từ LocalDateTime
+    public Boolean isRefreshTokenExpired(LocalDateTime expiry) {
+        if (expiry == null)
+            return true;
+        return LocalDateTime.now().isAfter(expiry);
     }
 
     /**

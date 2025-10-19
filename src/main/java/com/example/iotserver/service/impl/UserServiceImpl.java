@@ -64,4 +64,10 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(true); // Mở khóa tài khoản
         return userRepository.save(user);
     }
+
+    // ✅ THÊM IMPLEMENTATION MỚI
+    @Override
+    public Optional<User> findByRefreshToken(String refreshToken) {
+        return userRepository.findByRefreshToken(refreshToken);
+    }
 }
