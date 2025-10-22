@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.iotserver.enums.UserRole;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLRestriction("deleted = false")
 public class User {
 
     @Id
@@ -43,6 +45,10 @@ public class User {
 
     @Column(nullable = false)
     private Boolean enabled = true;
+
+    // VVVV--- THÊM TRƯỜNG MỚI DƯỚI ĐÂY ---VVVV
+    @Column(nullable = false)
+    private Boolean deleted = false;
 
     // ✅ THÊM CÁC TRƯỜNG MỚI CHO REFRESH TOKEN
     @Column(name = "refresh_token", unique = true, length = 500)

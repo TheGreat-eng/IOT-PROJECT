@@ -34,14 +34,26 @@ public class SecurityConfig {
                                                 .requestMatchers(
                                                                 "/actuator/**",
                                                                 "/api/auth/**",
+
+                                                                // VVVV--- SỬA LẠI ĐƯỜNG DẪN Ở ĐÂY ---VVVV
+                                                                // SockJS sẽ gọi đến /ws và /ws/info...
+                                                                // Axios instance có baseURL là /api, nên đường dẫn thực
+                                                                // tế là /api/ws/**
+                                                                // Tuy nhiên, endpoint /ws của Spring không nằm dưới
+                                                                // /api.
+                                                                // Vấn đề là frontend đang gọi sai. Chúng ta cần sửa cả
+                                                                // frontend và backend.
+
+                                                                // CÁCH SỬA ĐÚNG:
+                                                                // 1. Cho phép /ws/** truy cập công khai
                                                                 "/ws/**",
+
+                                                                // ^^^^----------------------------------^^^^
+
                                                                 "/error",
-                                                                // ==== THÊM CÁC DÒNG NÀY VÀO ĐÂY ====
                                                                 "/v3/api-docs/**",
                                                                 "/swagger-ui/**",
-                                                                "/swagger-ui.html"
-                                                // ===================================
-                                                )
+                                                                "/swagger-ui.html")
                                                 .permitAll()
 
                                                 // Tất cả endpoints khác cần authentication

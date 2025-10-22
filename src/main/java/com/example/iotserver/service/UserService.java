@@ -1,5 +1,7 @@
 package com.example.iotserver.service;
 
+import com.example.iotserver.dto.request.SetPasswordRequest;
+import com.example.iotserver.dto.request.UpdateUserRequest;
 import com.example.iotserver.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,4 +27,13 @@ public interface UserService {
     User lockUser(Long userId);
 
     User unlockUser(Long userId);
+
+    // VVVV--- THÊM CÁC PHƯƠNG THỨC MỚI DƯỚI ĐÂY ---VVVV
+    User updateUserAsAdmin(Long userId, UpdateUserRequest request);
+
+    User setPasswordAsAdmin(Long userId, SetPasswordRequest request);
+
+    void softDeleteUser(Long userId);
+
+    Optional<User> findUserByIdEvenIfDeleted(Long userId); // Tìm user kể cả đã bị xóa
 }

@@ -4,18 +4,24 @@ package com.example.iotserver.service;
 
 import com.example.iotserver.dto.AIPredictionResponse;
 import com.example.iotserver.dto.SensorDataDTO;
-import com.example.iotserver.entity.Device;
-import com.example.iotserver.repository.DeviceRepository; // <-- THÊM IMPORT
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional; // <-- THÊM IMPORT
 
 @Service
 @Slf4j
@@ -24,42 +30,53 @@ public class AIService {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final SensorDataService sensorDataService;
-    private final DeviceRepository deviceRepository; // <-- THÊM VÀO CONSTRUCTOR
 
     @Value("${ai.service.url}")
     private String aiServiceUrl;
 
     public AIPredictionResponse getPredictions(Long farmId) {
         try {
-            // SỬA LOGIC Ở ĐÂY: Tìm thiết bị cảm biến đất trong farm
-            Optional<Device> soilSensor = deviceRepository
-                    .findByFarmIdAndType(farmId, Device.DeviceType.SENSOR_SOIL_MOISTURE)
-                    .stream()
-                    .findFirst();
-
-            if (soilSensor.isEmpty()) {
-                log.warn("Không tìm thấy cảm biến đất nào trong farm {} để lấy dữ liệu cho AI", farmId);
+            // Lấy dữ liệu cảm biến mới nhất (dùng làm current_data)
+            SensorDataDTO currentData = sensorDataService.getLatestSensorDataByFarmId(farmId);
+            if (currentData == null) {
+                log.warn("Không có dữ liệu 'hiện tại' cho farm {} để gửi tới AI", farmId);
                 return null;
             }
 
-            String deviceId = soilSensor.get().getDeviceId();
-            log.info("Sử dụng device {} để lấy dữ liệu cho AI của farm {}", deviceId, farmId);
+            // Lấy dữ liệu cảm biến 60 phút trước (dùng làm historical_data)
+            SensorDataDTO historicalData = sensorDataService.getSensorDataAt(farmId,
+                    java.time.LocalDateTime.now().minusHours(1));
+            if (historicalData == null) {
+                log.warn("Không có dữ liệu 'lịch sử' (60 phút trước) cho farm {} để gửi tới AI", farmId);
+                return null;
+            }
 
-            // Lấy dữ liệu lịch sử làm đầu vào cho AI model
-            List<SensorDataDTO> historicalData = sensorDataService.getSensorDataRange(
-                    deviceId, // <-- SỬ DỤNG deviceId ĐỘNG
-                    java.time.Instant.now().minus(java.time.Duration.ofHours(24)),
-                    java.time.Instant.now());
-
-            // ... phần còn lại giữ nguyên
+            // Xây dựng request body đúng chuẩn API Python yêu cầu
             Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("farm_id", farmId);
+
+            // Phần current_data
+            Map<String, Object> currentDataMap = Map.of(
+                    "temperature", currentData.getTemperature(),
+                    "humidity", currentData.getHumidity(),
+                    "lightIntensity", currentData.getLightIntensity());
+            requestBody.put("current_data", currentDataMap);
+
+            // Phần historical_data
+            Map<String, Object> historicalDataMap = Map.of(
+                    "soilMoisture_lag_60", historicalData.getSoilMoisture(),
+                    "temperature_lag_60", historicalData.getTemperature(),
+                    // Giả lập các giá trị rolling mean (cần cải tiến ở backend sau này)
+                    "soilMoisture_rolling_mean_60m", historicalData.getSoilMoisture(),
+                    "temperature_rolling_mean_60m", historicalData.getTemperature(),
+                    "lightIntensity_rolling_mean_60m", historicalData.getLightIntensity());
             requestBody.put("historical_data", historicalData);
 
-            log.info("Đang gửi request tới AI Service: {}", aiServiceUrl);
+            // Gọi đến đúng endpoint /predict/soil_moisture
+            String predictionUrl = aiServiceUrl.replace("/predict", "/predict/soil_moisture");
 
+            log.info("Đang gửi request tới AI Service: {}", predictionUrl);
             AIPredictionResponse response = restTemplate.postForObject(
-                    aiServiceUrl,
+                    predictionUrl,
                     requestBody,
                     AIPredictionResponse.class);
 
@@ -69,6 +86,37 @@ public class AIService {
         } catch (Exception e) {
             log.error("❌ Lỗi khi gọi AI Service: {}", e.getMessage());
             return null;
+        }
+    }
+
+    public Map<String, Object> diagnosePlantDisease(MultipartFile imageFile) {
+        try {
+            String diagnoseUrl = aiServiceUrl.replace("/predict", "/diagnose");
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("image", new ByteArrayResource(imageFile.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return imageFile.getOriginalFilename();
+                }
+            });
+
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+            log.info("Đang gửi ảnh tới AI Service để chẩn đoán: {}", diagnoseUrl);
+            Map<String, Object> response = restTemplate.postForObject(diagnoseUrl, requestEntity, Map.class);
+            log.info("✅ Nhận được kết quả chẩn đoán từ AI Service");
+            return response;
+
+        } catch (IOException e) {
+            log.error("❌ Lỗi đọc file ảnh: {}", e.getMessage());
+            return Map.of("error", "Lỗi đọc file ảnh");
+        } catch (Exception e) {
+            log.error("❌ Lỗi khi gọi AI Service chẩn đoán: {}", e.getMessage());
+            return Map.of("error", "Lỗi dịch vụ AI không khả dụng");
         }
     }
 }

@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// ... imports
+import com.example.iotserver.dto.response.ApiResponse; // <-- THÊM IMPORT NÀY
+
 /**
  * Controller xử lý các API liên quan đến sức khỏe cây trồng
  */
@@ -33,7 +36,7 @@ public class PlantHealthController {
      */
     @GetMapping("/current")
     @Operation(summary = "Lấy tình trạng sức khỏe hiện tại", description = "Phân tích sức khỏe cây dựa trên dữ liệu cảm biến mới nhất và các cảnh báo chưa xử lý")
-    public ResponseEntity<PlantHealthDTO> getCurrentHealth(
+    public ResponseEntity<ApiResponse<PlantHealthDTO>> getCurrentHealth(
             @Parameter(description = "ID nông trại", required = true) @RequestParam Long farmId) {
         log.info("🌿 [API] Lấy sức khỏe hiện tại cho nông trại: {}", farmId);
 
@@ -45,11 +48,11 @@ public class PlantHealthController {
                     healthReport.getStatus(),
                     healthReport.getActiveAlerts().size());
 
-            return ResponseEntity.ok(healthReport);
+            return ResponseEntity.ok(ApiResponse.success("Lấy dữ liệu sức khỏe thành công", healthReport));
 
         } catch (Exception e) {
             log.error("❌ [API] Lỗi khi lấy sức khỏe: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body(ApiResponse.error("Lỗi máy chủ khi phân tích sức khỏe."));
         }
     }
 

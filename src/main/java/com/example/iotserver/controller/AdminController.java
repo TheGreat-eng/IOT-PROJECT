@@ -2,10 +2,15 @@
 
 package com.example.iotserver.controller;
 
+import com.example.iotserver.dto.DeviceDTO;
+import com.example.iotserver.dto.FarmDTO;
+import com.example.iotserver.dto.request.SetPasswordRequest;
+import com.example.iotserver.dto.request.UpdateUserRequest;
 import com.example.iotserver.dto.response.AdminStatsDTO;
 import com.example.iotserver.dto.response.AdminUserDTO;
 import com.example.iotserver.dto.response.ApiResponse;
 import com.example.iotserver.entity.Device;
+import com.example.iotserver.entity.Farm;
 import com.example.iotserver.entity.User;
 import com.example.iotserver.repository.DeviceRepository;
 import com.example.iotserver.repository.FarmRepository;
@@ -16,7 +21,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -91,5 +101,77 @@ public class AdminController {
                 .createdAt(user.getCreatedAt())
                 .lastLogin(user.getLastLogin())
                 .build();
+    }
+
+    // VVVV--- THÊM CÁC API MỚI DƯỚI ĐÂY ---VVVV
+
+    @GetMapping("/farms")
+    @Operation(summary = "Lấy danh sách TẤT CẢ nông trại trong hệ thống")
+    public ResponseEntity<ApiResponse<List<FarmDTO>>> getAllFarms() {
+        List<Farm> farms = farmRepository.findAll();
+        List<FarmDTO> farmDtos = farms.stream().map(this::convertToFarmDTO).collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.success(farmDtos));
+    }
+
+    @GetMapping("/devices")
+    @Operation(summary = "Lấy danh sách TẤT CẢ thiết bị trong hệ thống")
+    public ResponseEntity<ApiResponse<List<DeviceDTO>>> getAllDevices() {
+        List<Device> devices = deviceRepository.findAll();
+        List<DeviceDTO> deviceDtos = devices.stream().map(this::convertToDeviceDTO).collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.success(deviceDtos));
+    }
+
+    @PutMapping("/users/{id}")
+    @Operation(summary = "Cập nhật thông tin người dùng (Admin)")
+    public ResponseEntity<ApiResponse<AdminUserDTO>> updateUserAsAdmin(@PathVariable Long id,
+            @Valid @RequestBody UpdateUserRequest request) {
+        User updatedUser = userService.updateUserAsAdmin(id, request);
+        return ResponseEntity
+                .ok(ApiResponse.success("Cập nhật người dùng thành công", convertToAdminUserDTO(updatedUser)));
+    }
+
+    @PostMapping("/users/{id}/set-password")
+    @Operation(summary = "Đặt lại mật khẩu cho người dùng (Admin)")
+    public ResponseEntity<ApiResponse<String>> setPasswordAsAdmin(@PathVariable Long id,
+            @Valid @RequestBody SetPasswordRequest request) {
+        userService.setPasswordAsAdmin(id, request);
+        return ResponseEntity.ok(ApiResponse.success("Đặt lại mật khẩu thành công", "Success"));
+    }
+
+    @DeleteMapping("/users/{id}")
+    @Operation(summary = "Xóa mềm một người dùng (Admin)")
+    public ResponseEntity<ApiResponse<String>> softDeleteUser(@PathVariable Long id) {
+        userService.softDeleteUser(id);
+        return ResponseEntity.ok(ApiResponse.success("Xóa mềm người dùng thành công", "Success"));
+    }
+
+    // ... phương thức convertToAdminUserDTO giữ nguyên ...
+
+    // VVVV--- THÊM CÁC HELPER METHOD ĐỂ MAP DTO ---VVVV
+    private FarmDTO convertToFarmDTO(Farm farm) {
+        return FarmDTO.builder()
+                .id(farm.getId())
+                .name(farm.getName())
+                .location(farm.getLocation())
+                .ownerId(farm.getOwner().getId())
+                .ownerEmail(farm.getOwner().getEmail())
+                .createdAt(farm.getCreatedAt())
+                .totalDevices(deviceRepository.countByFarmId(farm.getId()))
+                .build();
+    }
+
+    private DeviceDTO convertToDeviceDTO(Device device) {
+        DeviceDTO dto = DeviceDTO.builder()
+                .id(device.getId())
+                .deviceId(device.getDeviceId())
+                .name(device.getName())
+                .type(device.getType().name())
+                .status(device.getStatus().name())
+                .farmId(device.getFarm().getId())
+                .farmName(device.getFarm().getName())
+                .lastSeen(device.getLastSeen())
+                .build();
+        dto.calculateDerivedFields();
+        return dto;
     }
 }

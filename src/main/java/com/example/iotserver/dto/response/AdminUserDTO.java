@@ -18,6 +18,7 @@ public class AdminUserDTO {
     private String phoneNumber;
     private UserRole role;
     private Boolean enabled; // Trạng thái tài khoản (true: hoạt động, false: bị khóa)
+    private Boolean deleted; // <-- THÊM TRƯỜNG NÀY
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
