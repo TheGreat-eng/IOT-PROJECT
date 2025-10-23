@@ -23,7 +23,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/devices")
 @RequiredArgsConstructor
-@Tag(name = "2. Device Management", description = "API quản lý thiết bị IoT (cảm biến, actuator)")
+@Tag(name = "02. Device Management", description = "API quản lý thiết bị IoT (cảm biến, actuator)")
 public class DeviceController {
 
     private final DeviceService deviceService;

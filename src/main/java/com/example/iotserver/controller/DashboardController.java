@@ -17,7 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/dashboard")
 @RequiredArgsConstructor
-@Tag(name = "5. Dashboard", description = "API tổng quan và thống kê")
+@Tag(name = "05. Dashboard", description = "API tổng quan và thống kê")
 public class DashboardController {
 
         private final DeviceService deviceService;

@@ -21,7 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/reports")
 @RequiredArgsConstructor
-@Tag(name = "8. Reports", description = "API báo cáo và thống kê")
+@Tag(name = "08. Reports", description = "API báo cáo và thống kê")
 public class ReportController {
 
     private final ReportService reportService;

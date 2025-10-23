@@ -43,13 +43,8 @@ public class AIService {
                 return null;
             }
 
-            // Lấy dữ liệu cảm biến 60 phút trước (dùng làm historical_data)
-            SensorDataDTO historicalData = sensorDataService.getSensorDataAt(farmId,
-                    java.time.LocalDateTime.now().minusHours(1));
-            if (historicalData == null) {
-                log.warn("Không có dữ liệu 'lịch sử' (60 phút trước) cho farm {} để gửi tới AI", farmId);
-                return null;
-            }
+            // Dùng tạm dữ liệu hiện tại cho dữ liệu lịch sử để test
+            SensorDataDTO historicalData = currentData;
 
             // Xây dựng request body đúng chuẩn API Python yêu cầu
             Map<String, Object> requestBody = new HashMap<>();
@@ -65,11 +60,11 @@ public class AIService {
             Map<String, Object> historicalDataMap = Map.of(
                     "soilMoisture_lag_60", historicalData.getSoilMoisture(),
                     "temperature_lag_60", historicalData.getTemperature(),
-                    // Giả lập các giá trị rolling mean (cần cải tiến ở backend sau này)
                     "soilMoisture_rolling_mean_60m", historicalData.getSoilMoisture(),
                     "temperature_rolling_mean_60m", historicalData.getTemperature(),
                     "lightIntensity_rolling_mean_60m", historicalData.getLightIntensity());
-            requestBody.put("historical_data", historicalData);
+            // DÒNG SỬA LỖI NẰM Ở ĐÂY:
+            requestBody.put("historical_data", historicalDataMap); // Gửi đi Map thay vì DTO
 
             // Gọi đến đúng endpoint /predict/soil_moisture
             String predictionUrl = aiServiceUrl.replace("/predict", "/predict/soil_moisture");

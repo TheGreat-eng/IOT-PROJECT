@@ -14,8 +14,10 @@ import com.example.iotserver.dto.request.ChangePasswordRequest;
 import com.example.iotserver.entity.User;
 import com.example.iotserver.service.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "10. User", description = "API quản lý người dùng")
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor

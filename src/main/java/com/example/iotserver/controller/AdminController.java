@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
-@Tag(name = "0. Admin Management", description = "API quản trị hệ thống (Yêu cầu quyền ADMIN)")
+@Tag(name = "01. Admin Management", description = "API quản trị hệ thống (Yêu cầu quyền ADMIN)")
 @SecurityRequirement(name = "bearerAuth") // Yêu cầu xác thực JWT cho tất cả API trong controller này
 @PreAuthorize("hasAuthority('ADMIN')") // Chỉ user có role ADMIN mới được truy cập
 public class AdminController {

@@ -25,7 +25,7 @@ import com.example.iotserver.dto.response.ApiResponse; // <-- THÊM IMPORT NÀY
 @RequestMapping("/api/plant-health")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "9. Plant Health", description = "API quản lý cảnh báo sức khỏe cây trồng")
+@Tag(name = "09. Plant Health", description = "API quản lý cảnh báo sức khỏe cây trồng")
 public class PlantHealthController {
 
     private final PlantHealthService plantHealthService;

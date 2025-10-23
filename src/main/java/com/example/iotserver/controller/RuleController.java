@@ -18,7 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/rules")
 @RequiredArgsConstructor
-@Tag(name = "4. Rule Automation", description = "API quản lý quy tắc tự động hóa")
+@Tag(name = "04. Rule Automation", description = "API quản lý quy tắc tự động hóa")
 public class RuleController {
 
     private final RuleService ruleService;

@@ -29,7 +29,7 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-@Tag(name = "1. Authentication", description = "API cho việc Đăng ký và Đăng nhập")
+@Tag(name = "01. Authentication", description = "API cho việc Đăng ký và Đăng nhập")
 public class AuthController {
 
     private final UserService userService;

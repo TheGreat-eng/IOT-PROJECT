@@ -67,20 +67,24 @@ public class MqttMessageHandler {
             Map<String, Object> data = objectMapper.readValue(payload, Map.class);
             SensorDataDTO sensorData = SensorDataDTO.fromMqttPayload(deviceId, data);
 
-            // Bắt buộc phải lưu dữ liệu vào InfluxDB TRƯỚC
-            sensorDataService.saveSensorData(sensorData);
-
-            // ✅ SỬA: Fetch device với farm và owner
+            // SỬA LỖI Ở ĐÂY: Tìm Device và Farm ID TRƯỚC KHI LƯU
             Device device = deviceRepository.findByDeviceIdWithFarmAndOwner(deviceId)
                     .orElse(null);
 
             if (device != null) {
+                Long farmId = device.getFarm().getId();
+                // Gán farmId vào DTO
+                sensorData.setFarmId(farmId);
+
+                // BÂY GIỜ MỚI LƯU DỮ LIỆU VÀO INFLUXDB (với farmId chính xác)
+                sensorDataService.saveSensorData(sensorData);
+
+                // Cập nhật trạng thái và lastSeen cho device
                 device.setLastSeen(LocalDateTime.now());
                 device.setStatus(Device.DeviceStatus.ONLINE);
                 deviceRepository.save(device);
 
-                Long farmId = device.getFarm().getId();
-                sensorData.setFarmId(farmId);
+                // Gửi thông báo qua WebSocket
                 webSocketService.sendSensorData(farmId, sensorData);
 
                 // Kích hoạt phân tích sức khỏe cây trồng

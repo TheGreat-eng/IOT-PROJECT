@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/farms")
 @RequiredArgsConstructor
-@Tag(name = "3. Farm Management", description = "API quản lý nông trại")
+@Tag(name = "03. Farm Management", description = "API quản lý nông trại")
 public class FarmController {
 
     private final FarmService farmService;

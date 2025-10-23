@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/weather")
 @RequiredArgsConstructor
-@Tag(name = "6. Weather", description = "API dữ liệu thời tiết")
+@Tag(name = "06. Weather", description = "API dữ liệu thời tiết")
 public class WeatherController {
 
     private final WeatherService weatherService;
